@@ -29,7 +29,8 @@ const HealthcareWorkerDashboard = () => {
   try {
   setError(null);
   // SECURITY FIX: Include user_email parameter for authorization
-  const url = `http://localhost:8000/healthcare-dashboard?user_email=${encodeURIComponent(user?.email || '')}`;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const url = `${API_BASE_URL}/healthcare-dashboard?user_email=${encodeURIComponent(user?.email || '')}`;
   const response = await fetch(url);
   if (!response.ok) {
   if (response.status === 403) {
@@ -60,8 +61,9 @@ const HealthcareWorkerDashboard = () => {
 
   const fetchConsultationData = async () => {
   try {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   // Fetch consultation requests
-  const consultResponse = await fetch(`http://localhost:8000/consultation-requests?user_email=${user?.email}`);
+  const consultResponse = await fetch(`${API_BASE_URL}/consultation-requests?user_email=${user?.email}`);
   const consultData = await consultResponse.json();
 
   if (consultData.status === 'success') {
@@ -69,7 +71,7 @@ const HealthcareWorkerDashboard = () => {
   }
 
   // Fetch consultation stats
-  const statsResponse = await fetch(`http://localhost:8000/consultation-requests/stats/${user?.email}`);
+  const statsResponse = await fetch(`${API_BASE_URL}/consultation-requests/stats/${user?.email}`);
   const statsData = await statsResponse.json();
 
   if (statsData.status === 'success') {
@@ -199,7 +201,8 @@ const HealthcareWorkerDashboard = () => {
   // Handle consultation response
   const handleRespondToConsultation = async (consultationId, status, message) => {
     try {
-      const response = await fetch(`http://localhost:8000/consultation-request/${consultationId}?user_email=${user?.email}`, {
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${API_BASE_URL}/consultation-request/${consultationId}?user_email=${user?.email}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

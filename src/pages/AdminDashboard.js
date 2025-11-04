@@ -35,7 +35,8 @@ const AdminDashboard = () => {
   try {
   setError(null);
   // SECURITY FIX: Including user_email parameter for authorization
-  const url = `http://localhost:8000/admin-dashboard?user_email=${encodeURIComponent(user?.email || '')}`;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const url = `${API_BASE_URL}/admin-dashboard?user_email=${encodeURIComponent(user?.email || '')}`;
   const response = await fetch(url);
   if (!response.ok) {
   if (response.status === 403) {
@@ -63,7 +64,8 @@ const AdminDashboard = () => {
   // Fetch consultation statistics
   const fetchConsultationStats = async () => {
   try {
-  const response = await fetch('http://localhost:8000/admin/consultation-stats');
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const response = await fetch(`${API_BASE_URL}/admin/consultation-stats`);
   const data = await response.json();
   if (data.status === 'success') {
   setConsultationStats(data.data);
@@ -114,7 +116,8 @@ const AdminDashboard = () => {
 
   setActionLoading(true);
   try {
-  const response = await fetch('http://localhost:8000/admin/users', {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const response = await fetch(`${API_BASE_URL}/admin/users`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(formData)
@@ -155,7 +158,8 @@ const AdminDashboard = () => {
 
   setActionLoading(true);
   try {
-  const response = await fetch(`http://localhost:8000/admin/users/${selectedUser.id}?name=${encodeURIComponent(formData.name)}&role=${encodeURIComponent(formData.role)}`, {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const response = await fetch(`${API_BASE_URL}/admin/users/${selectedUser.id}?name=${encodeURIComponent(formData.name)}&role=${encodeURIComponent(formData.role)}`, {
   method: 'PUT',
   headers: { 'Content-Type': 'application/json' }
   });
@@ -189,7 +193,8 @@ const AdminDashboard = () => {
   const handleDeleteUser = async () => {
   setActionLoading(true);
   try {
-  const response = await fetch(`http://localhost:8000/admin/users/${selectedUser.id}`, {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const response = await fetch(`${API_BASE_URL}/admin/users/${selectedUser.id}`, {
   method: 'DELETE'
   });
 
@@ -221,7 +226,8 @@ const AdminDashboard = () => {
   // Block/Unblock User
   const handleToggleBlock = async (userId, currentBlockStatus) => {
   try {
-  const response = await fetch(`http://localhost:8000/admin/users/${userId}/block?blocked=${!currentBlockStatus}`, {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/block?blocked=${!currentBlockStatus}`, {
   method: 'PUT'
   });
 

@@ -32,8 +32,9 @@ const History = () => {
   setError(null);
 
   // Fetch risk assessments from backend
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   const assessmentResponse = await fetch(
-  `http://localhost:8000/risk-assessments?user_email=${encodeURIComponent(user.email)}`
+  `${API_BASE_URL}/risk-assessments?user_email=${encodeURIComponent(user.email)}`
   );
 
   if (assessmentResponse.ok) {
@@ -50,7 +51,7 @@ const History = () => {
   // Fetch chat history from backend (Supabase via FastAPI)
   try {
   const chatResponse = await fetch(
-  `http://localhost:8000/chat-history?user_id=${encodeURIComponent(user.id)}`
+  `${API_BASE_URL}/chat-history?user_id=${encodeURIComponent(user.id)}`
   );
 
   if (chatResponse.ok) {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calculator, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-const API_BASE = 'http://localhost:8000'; 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const PredictionInput = () => {
   const { user, loading: authLoading } = useAuth();

@@ -39,8 +39,9 @@ const PregnantDashboard = () => {
 
   const fetchDashboardData = async () => {
   try {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   // Fetch dashboard stats
-  const statsResponse = await fetch(`http://localhost:8000/dashboard-stats?user_email=${user?.email}`);
+  const statsResponse = await fetch(`${API_BASE_URL}/dashboard-stats?user_email=${user?.email}`);
   const statsData = await statsResponse.json();
 
   if (statsData.status === 'success') {
@@ -49,7 +50,7 @@ const PregnantDashboard = () => {
   }
 
   // Fetch user profile
-  const profileResponse = await fetch(`http://localhost:8000/user-profile?user_email=${user?.email}`);
+  const profileResponse = await fetch(`${API_BASE_URL}/user-profile?user_email=${user?.email}`);
   const profileData = await profileResponse.json();
 
   if (profileData.status === 'success' && profileData.user) {
@@ -81,10 +82,11 @@ const PregnantDashboard = () => {
 
   const fetchConsultationData = async () => {
   try {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   console.log('🔍 [PregnantDashboard] Fetching consultation data for:', user?.email);
 
   // Fetch consultation requests
-  const consultResponse = await fetch(`http://localhost:8000/consultation-requests?user_email=${user?.email}`);
+  const consultResponse = await fetch(`${API_BASE_URL}/consultation-requests?user_email=${user?.email}`);
   const consultData = await consultResponse.json();
   console.log('[PregnantDashboard] Consultation requests response:', consultData);
 
@@ -94,7 +96,7 @@ const PregnantDashboard = () => {
   }
 
   // Fetch consultation stats
-  const statsResponse = await fetch(`http://localhost:8000/consultation-requests/stats/${user?.email}`);
+  const statsResponse = await fetch(`${API_BASE_URL}/consultation-requests/stats/${user?.email}`);
   const statsData = await statsResponse.json();
   console.log('[PregnantDashboard] Consultation stats response:', statsData);
 
@@ -127,7 +129,8 @@ const PregnantDashboard = () => {
     return;
   }
 
-  const response = await fetch(`http://localhost:8000/consultation-request?user_email=${user?.email}`, {
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const response = await fetch(`${API_BASE_URL}/consultation-request?user_email=${user?.email}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

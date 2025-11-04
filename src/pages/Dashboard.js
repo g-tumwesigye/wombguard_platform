@@ -33,7 +33,8 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
   try {
   // Build URL with role and user_email (for pregnant women)
-  let url = `http://localhost:8000/dashboard?role=${user?.role}`;
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  let url = `${API_BASE_URL}/dashboard?role=${user?.role}`;
   if (user?.role === 'pregnant_woman' && user?.email) {
   url += `&user_email=${encodeURIComponent(user.email)}`;
   }
