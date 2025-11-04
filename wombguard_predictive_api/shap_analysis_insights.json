@@ -1,0 +1,12 @@
+{
+  "analysis_timestamp": "2025-10-07T19:26:43.228852",
+  "base_prediction_value": null,
+  "global_feature_importance": [],
+  "clinical_insights": {
+    "top_risk_factors": [],
+    "risk_increasing_features": [],
+    "risk_decreasing_features": [],
+    "model_interpretability": "High"
+  },
+  "sample_explanations": []
+}

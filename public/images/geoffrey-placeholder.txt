@@ -1,0 +1,14 @@
+INSTRUCTIONS FOR ADDING GEOFFREY'S IMAGE:
+
+1. Save the Geoffrey Tumwesigye image you provided as: Desktop/wombguard_frontend/public/images/geoffrey.jpg
+
+2. The About.js file has been updated to reference: /images/geoffrey.jpg
+
+3. Once you save the image file in the public/images folder, it will automatically display on the About page.
+
+The image should be:
+- Format: JPG or PNG
+- Filename: geoffrey.jpg
+- Location: public/images/geoffrey.jpg
+- Size: Recommended 400x400px or similar square format
+
