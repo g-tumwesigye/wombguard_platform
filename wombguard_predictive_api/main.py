@@ -32,10 +32,9 @@ app = FastAPI(title="Predictive Maternal Health System & the WombGuard Conversat
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",  
-        # "https://wombguard-platform.onrender.com",  
-        # "https://wombguard-platform.vercel.app",  
-        # "https://wombguard-platform.netlify.app",  
+        "http://localhost:3000",
+        "https://wombguard-platform.onrender.com",
+        "https://wombguard-api.onrender.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
