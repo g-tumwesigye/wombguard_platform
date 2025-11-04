@@ -185,6 +185,34 @@ def send_verification_email(email: str, token: str):
 
 
 # AUTHORIZATION HELPER FUNCTIONS
+def parse_datetime(datetime_str: str):
+    """
+    Parse datetime string from Supabase, handling various formats.
+    Supabase sometimes returns timestamps with 5-digit microseconds which Python can't parse.
+    """
+    if not datetime_str:
+        return None
+    try:
+        # Remove 'Z' and replace with '+00:00'
+        datetime_str = datetime_str.replace("Z", "+00:00")
+        # Try parsing directly
+        return datetime.fromisoformat(datetime_str)
+    except ValueError:
+        # If it fails, it might be due to microseconds issue
+        # Extract and normalize microseconds
+        import re
+        # Pattern: YYYY-MM-DDTHH:MM:SS.microseconds+TZ
+        match = re.match(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})\.(\d+)([\+\-]\d{2}:\d{2})', datetime_str)
+        if match:
+            date_part, microseconds, tz_part = match.groups()
+            # Normalize microseconds to 6 digits
+            microseconds = microseconds.ljust(6, '0')[:6]
+            normalized = f"{date_part}.{microseconds}{tz_part}"
+            return datetime.fromisoformat(normalized)
+        # Fallback: return current time
+        return datetime.utcnow()
+
+
 def require_admin(user: dict):
     """ SECURITY FIX: Check if user is admin, raise 403 if not"""
     if not user or user.get('role') != 'admin':
@@ -1042,12 +1070,10 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
             day_date = today - timedelta(days=6 - i)
             day_name = days[i]
             day_count = sum(
-                1 for p in predictions if datetime.fromisoformat(
-                    p.get(
-                        "created_at",
-                        "").replace(
-                        "Z",
-                        "+00:00")).date() == day_date.date())
+                1 for p in predictions
+                if parse_datetime(p.get("created_at", "")) and
+                parse_datetime(p.get("created_at", "")).date() == day_date.date()
+            )
             weekly_data[day_name] = day_count
 
         # Get high-risk patients (most recent assessment per patient)
@@ -1105,8 +1131,8 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                                 "improvement_percent": round(improvement, 1),
                                 "high_risk_date": created_at,
                                 "latest_date": latest_pred.get("created_at"),
-                                "days_improved": (datetime.fromisoformat(latest_pred.get("created_at", "")) -
-                                                 datetime.fromisoformat(created_at)).days
+                                "days_improved": (parse_datetime(latest_pred.get("created_at", "")) -
+                                                 parse_datetime(created_at)).days if parse_datetime(latest_pred.get("created_at", "")) and parse_datetime(created_at) else 0
                             })
                         break  # Only count the most recent high-risk assessment
 
@@ -1253,12 +1279,10 @@ def get_admin_dashboard(user_email: str = Query(...)):
             month_date = today - timedelta(days=30 * i)
             month_key = month_date.strftime("%b")
             month_count = sum(
-                1 for p in predictions if datetime.fromisoformat(
-                    p.get(
-                        "created_at",
-                        "").replace(
-                        "Z",
-                        "+00:00")).month == month_date.month)
+                1 for p in predictions
+                if parse_datetime(p.get("created_at", "")) and
+                parse_datetime(p.get("created_at", "")).month == month_date.month
+            )
             monthly_data[month_key] = month_count
 
         # User distribution
