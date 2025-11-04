@@ -93,7 +93,7 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 
 ---
 
-## 📸 Platform Screenshots
+## Platform Screenshots
 
 ### Landing Page
 ![Landing Page](public/screenshots/landing-page.png)
@@ -113,7 +113,7 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 
 ---
 
-## 🎥 Demo Video
+## Demo Video
 
 > **Coming Soon!** A comprehensive walkthrough of the WombGuard Platform will be available here.
 
