@@ -19,6 +19,8 @@
 
 - [Project Overview](#-project-overview)
 - [Key Features](#-key-features)
+- [Platform Screenshots](#-platform-screenshots)
+- [Demo Video](#-demo-video)
 - [Tech Stack](#️-tech-stack)
 - [Project Structure](#-project-structure)
 - [Quick Start](#-quick-start)
@@ -88,6 +90,32 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 - **User Management** - Block/unblock users, role assignment
 - **Multi-tenant Support** - Scalable architecture
 - **Performance Monitoring** - System health and metrics
+
+---
+
+## 📸 Platform Screenshots
+
+### Landing Page
+![Landing Page](public/screenshots/landing-page.png)
+*WombGuard's welcoming homepage with clear call-to-action for users*
+
+### Pregnant Woman Dashboard
+![Pregnant Dashboard](public/screenshots/pregnant-dashboard.png)
+*Personalized dashboard showing health metrics, risk assessment, and trends*
+
+### Healthcare Provider Dashboard
+![Healthcare Dashboard](public/screenshots/healthcare-dashboard.png)
+*Provider view with patient monitoring, risk analytics, and consultation management*
+
+### System Admin Dashboard
+![Admin Dashboard](public/screenshots/admin-dashboard.png)
+*Administrative panel for user management, system analytics, and platform oversight*
+
+---
+
+## 🎥 Demo Video
+
+> **Coming Soon!** A comprehensive walkthrough of the WombGuard Platform will be available here.
 
 ---
 
@@ -281,7 +309,7 @@ wombguard_platform/
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/wombguard_platform.git
+git clone https://github.com/g-tumwesigye/wombguard_platform.git
 cd wombguard_platform
 
 # Start both servers with one command
@@ -391,7 +419,7 @@ open http://localhost:8000/docs
 
 **Step 1: Clone Repository**
 ```bash
-git clone https://github.com/YOUR_USERNAME/wombguard_platform.git
+git clone https://github.com/g-tumwesigye/wombguard_platform.git
 cd wombguard_platform
 ```
 
@@ -1110,7 +1138,7 @@ async def predict(...):
 
 ### 6. Testing Guide
 
-#### 🧪 Automated Testing
+#### Automated Testing
 
 **Run Comprehensive Tests:**
 ```bash
@@ -1738,8 +1766,8 @@ SOFTWARE.
 ### Contact Information
 
 - **Email**: support@wombguard.com
-- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/wombguard_platform/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/wombguard_platform/discussions)
+- **Issues**: [GitHub Issues](https://github.com/g-tumwesigye/wombguard_platform/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/g-tumwesigye/wombguard_platform/discussions)
 - **Phone**: +250 788 123 456 (Rwanda)
 
 ### Support Hours
