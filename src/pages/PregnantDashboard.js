@@ -29,35 +29,55 @@ const PregnantDashboard = () => {
   const [consultationSuccess, setConsultationSuccess] = useState(null);
 
   useEffect(() => {
+  // Only fetch data if user is available
+  if (user?.email) {
   fetchDashboardData();
 
   // Auto-refresh dashboard every 30 seconds
   const interval = setInterval(fetchDashboardData, 30000);
 
   return () => clearInterval(interval);
+  }
   }, [user]);
 
   const fetchDashboardData = async () => {
   try {
+  // Guard clause: Don't fetch if user email is not available
+  if (!user?.email) {
+  console.error('[PregnantDashboard] Cannot fetch data: user email is not available');
+  setLoading(false);
+  return;
+  }
+
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  console.log('[PregnantDashboard] Fetching dashboard stats for:', user.email);
+
   // Fetch dashboard stats
-  const statsResponse = await fetch(`${API_BASE_URL}/dashboard-stats?user_email=${user?.email}`);
+  const statsResponse = await fetch(`${API_BASE_URL}/dashboard-stats?user_email=${user.email}`);
   const statsData = await statsResponse.json();
+  console.log('[PregnantDashboard] Dashboard stats response:', statsData);
 
   if (statsData.status === 'success') {
   setDashboardStats(statsData.stats);
   setRecentAssessments(statsData.recent_assessments || []);
+  console.log('[PregnantDashboard] Dashboard stats set:', statsData.stats);
+  } else {
+  console.error('[PregnantDashboard] Failed to fetch dashboard stats:', statsData.message);
   }
 
   // Fetch user profile
-  const profileResponse = await fetch(`${API_BASE_URL}/user-profile?user_email=${user?.email}`);
+  console.log('[PregnantDashboard] Fetching user profile for:', user.email);
+  const profileResponse = await fetch(`${API_BASE_URL}/user-profile?user_email=${user.email}`);
   const profileData = await profileResponse.json();
+  console.log('[PregnantDashboard] User profile response:', profileData);
 
   if (profileData.status === 'success' && profileData.user) {
   setUserProfile(profileData.user);
+  console.log('[PregnantDashboard] User profile set:', profileData.user.name);
   } else {
   // Use user from context if profile fetch fails
   setUserProfile(user);
+  console.log('[PregnantDashboard] Using user from context as fallback');
   }
 
   // Fetch consultation data
