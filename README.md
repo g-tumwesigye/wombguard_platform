@@ -20,9 +20,11 @@
 - [Project Overview](#-project-overview)
 - [Key Features](#-key-features)
 - [Platform Screenshots](#-platform-screenshots)
-- [Demo Video](#-demo-video)
+- [🎥 Demo Video](#-demo-video)
+- [🚀 Deployed Application](#-deployed-application)
 - [Tech Stack](#️-tech-stack)
 - [Project Structure](#-project-structure)
+- [📁 Related Files & Resources](#-related-files--resources)
 - [Quick Start](#-quick-start)
 - [Complete Documentation](#-complete-documentation)
   - [Installation Guide](#1-installation-guide)
@@ -113,9 +115,53 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 
 ---
 
-## Demo Video
+## 🎥 Demo Video
 
-> **Coming Soon!** A comprehensive walkthrough of the WombGuard Platform will be available here.
+**Watch the 5-minute platform demonstration:**
+
+[![WombGuard Platform Demo](https://img.shields.io/badge/▶️_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube)](YOUR_YOUTUBE_VIDEO_LINK_HERE)
+
+> **📹 Demo Highlights:**
+> - ✅ **Pregnant Woman Dashboard** - Health tracking and risk assessment
+> - ✅ **Health Check Feature** - AI-powered risk prediction with real-time results
+> - ✅ **WombGuardBot Chatbot** - 24/7 pregnancy health guidance
+> - ✅ **Healthcare Provider Dashboard** - Patient monitoring and analytics
+> - ✅ **Admin Dashboard** - User management and system analytics
+> - ✅ **Three-Tier Risk Management** - High-risk alerts and trend analysis
+> - ✅ **Consultation Management** - Request and track consultations
+>
+> **Note:** The demo focuses on core functionalities and real-world usage scenarios.
+
+---
+
+## 🚀 Deployed Application
+
+**Access the live platform:**
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Platform-success?style=for-the-badge)](https://wombguard-platform.onrender.com)
+
+**Platform URLs:**
+- **Frontend (Web App):** https://wombguard-platform.onrender.com
+- **Backend API:** https://wombguard-api.onrender.com
+- **API Documentation:** https://wombguard-api.onrender.com/docs
+
+### 🔐 Demo Accounts
+
+Test the platform with these pre-configured accounts:
+
+| Role | Email | Password | Access Level |
+|------|-------|----------|--------------|
+| **Pregnant Woman** | `g.tumwesigye@alustudent.com` | `[Contact for password]` | Personal dashboard, health checks, chatbot |
+| **Healthcare Provider** | `tumwesigye.geofrey@gmail.com` | `[Contact for password]` | Patient monitoring, consultations |
+| **System Admin** | `kennedy@example.com` | `[Contact for password]` | Full system access, user management |
+
+> **⚠️ Note:** These are demo accounts for evaluation purposes. For security reasons, passwords are provided separately.
+
+### 📱 Platform Access
+
+- **Web Browser:** Access from any modern browser (Chrome, Firefox, Safari, Edge)
+- **Mobile Responsive:** Fully optimized for mobile devices
+- **No Installation Required:** Cloud-based platform accessible anywhere
 
 ---
 
@@ -294,6 +340,115 @@ wombguard_platform/
 - **`src/`** - React frontend source code
 - **`wombguard_predictive_api/`** - FastAPI backend with ML models
 - **`wombguardbot_models/`** - AI chatbot models and training data
+
+---
+
+## 📁 Related Files & Resources
+
+### Core Project Files
+
+| File/Directory | Description | Purpose |
+|----------------|-------------|---------|
+| **`README.md`** | Main documentation | Project overview, setup instructions, and usage guide |
+| **`START_HERE.md`** | Quick start guide | Step-by-step setup for new developers |
+| **`LICENSE`** | MIT License | Legal terms and conditions |
+| **`.gitignore`** | Git ignore rules | Files excluded from version control |
+| **`.env.example`** | Environment template | Sample configuration for environment variables |
+
+### Documentation Files (`docs/`)
+
+| File | Description | Use Case |
+|------|-------------|----------|
+| **`API_DOCUMENTATION.md`** | Complete API reference | Backend endpoint documentation with examples |
+| **`DEPLOYMENT_GUIDE.md`** | Deployment instructions | Step-by-step deployment to production |
+| **`DEPLOYMENT_PLATFORMS_GUIDE.md`** | Platform-specific guides | Vercel, Railway, Render deployment |
+| **`GITHUB_SUBMISSION_GUIDE.md`** | GitHub best practices | Repository setup and submission guidelines |
+| **`CHATBOT_ARCHITECTURE_SUMMARY.md`** | Chatbot technical details | AI model architecture and training |
+| **`DATABASE_SETUP_SUMMARY.md`** | Database schema guide | Table structures and relationships |
+| **`SECURITY_HARDENING_GUIDE.md`** | Security best practices | Authentication, authorization, data protection |
+| **`TESTING_GUIDE.md`** | Testing procedures | Unit tests, integration tests, E2E tests |
+
+### Database Files (`database/`)
+
+| SQL Script | Description | Execution Order |
+|------------|-------------|-----------------|
+| **`supabase_complete_setup.sql`** | Creates all tables and initial schema | 1st - Run first |
+| **`add_jwt_email_phone_columns.sql`** | Adds JWT, email verification, phone columns | 2nd |
+| **`add_contact_messages_table.sql`** | Creates contact form table | 3rd |
+| **`add_health_assessments_table.sql`** | Creates health assessments table | 4th |
+| **`add_is_blocked_column.sql`** | Adds user blocking functionality | 5th |
+| **`fix_rls_policies.sql`** | Implements Row-Level Security policies | 6th - Run last |
+
+### Frontend Files (`src/`)
+
+| Directory/File | Description | Key Components |
+|----------------|-------------|----------------|
+| **`App.js`** | Main application component | Routing, layout, global state |
+| **`index.js`** | React entry point | App initialization |
+| **`pages/`** | All page components | 14 pages (Landing, Dashboard, Login, etc.) |
+| **`components/`** | Reusable UI components | Navbar, forms, charts |
+| **`services/`** | API service layer | HTTP requests, data fetching |
+| **`contexts/`** | React Context providers | Authentication, global state |
+| **`config/`** | Configuration files | Supabase client, constants |
+
+### Backend Files (`wombguard_predictive_api/`)
+
+| File | Description | Functionality |
+|------|-------------|---------------|
+| **`main.py`** | FastAPI application | 30+ API endpoints, authentication, CRUD operations |
+| **`chatbot_engine.py`** | AI chatbot logic | Hybrid retrieval, semantic search, BM25 |
+| **`supabase_client.py`** | Database client | Supabase connection and queries |
+| **`requirements.txt`** | Python dependencies | All required packages and versions |
+| **`wombguard_pregnancy_model.pkl`** | Trained ML model | Random Forest classifier (97% accuracy) |
+| **`wombguard_predictive_models.ipynb`** | Model training notebook | Jupyter notebook for model development |
+
+### AI/ML Model Files (`wombguardbot_models/`)
+
+| File/Directory | Description | Details |
+|----------------|-------------|---------|
+| **`model_general_finetuned/`** | General pregnancy questions model | Fine-tuned Sentence Transformer |
+| **`model_medical_finetuned/`** | Medical/clinical questions model | Specialized medical knowledge |
+| **`model_qa_finetuned/`** | Q&A format questions model | Question-answer pair matching |
+| **`bm25_index.pkl`** | BM25 keyword index | Fast keyword-based retrieval |
+| **`embeddings_ensemble.npy`** | Pre-computed embeddings | 768-dimensional vectors |
+| **`the-wombguard-chatbot-training.ipynb`** | Chatbot training notebook | Model fine-tuning and evaluation |
+| **`wombguardbot_dataset/`** | Training data | 696 Q&A pairs, intents, patterns |
+
+### Configuration Files
+
+| File | Description | Configuration |
+|------|-------------|---------------|
+| **`package.json`** | Frontend dependencies | React, Tailwind, Axios, etc. |
+| **`tailwind.config.js`** | Tailwind CSS config | Custom colors, fonts, themes |
+| **`postcss.config.js`** | PostCSS config | CSS processing |
+| **`start_servers.sh`** | Startup script | Automated server launch |
+
+### Data Files
+
+| File | Description | Records |
+|------|-------------|---------|
+| **`wombguard_dataset.csv`** | Pregnancy risk training data | 1,317 patient records |
+| **`local_pregnancy_dataset.csv`** | Local dataset | Additional training data |
+| **`mother_intents_patterns_responses_data.json`** | Chatbot intents | Patterns and responses |
+| **`mother_question_and_answer_pairs_data.json`** | Q&A pairs | 696 question-answer pairs |
+
+### Important Notes
+
+> **📌 Essential Files for Setup:**
+> 1. `.env` files (create from `.env.example`)
+> 2. Database SQL scripts (run in order)
+> 3. `requirements.txt` (Python dependencies)
+> 4. `package.json` (Node.js dependencies)
+>
+> **📌 Pre-trained Models:**
+> - All AI/ML models are included in the repository
+> - No additional training required for basic setup
+> - Models are ready to use out-of-the-box
+>
+> **📌 Documentation Priority:**
+> - Start with `START_HERE.md` for quick setup
+> - Refer to `API_DOCUMENTATION.md` for backend details
+> - Check `DEPLOYMENT_GUIDE.md` for production deployment
 
 ---
 
@@ -1620,35 +1775,6 @@ Error: Out of memory / Process killed
 
 ---
 
-#### Getting Help
-
-**Documentation:**
-- Check `docs/` folder for detailed guides
-- Read API_DOCUMENTATION.md
-- Review SECURITY_HARDENING_GUIDE.md
-- See TESTING_GUIDE.md
-
-**Community:**
-- GitHub Discussions
-- GitHub Issues
-- Email: support@wombguard.com
-
-**Logs:**
-```bash
-# Backend logs
-cd wombguard_predictive_api
-uvicorn main:app --reload --log-level debug
-
-# Frontend logs
-npm start
-# Check browser console (F12)
-
-# Database logs
-# Check Supabase Dashboard → Logs
-```
-
----
-
 ## Performance Metrics
 
 ### Current Performance
@@ -1718,7 +1844,6 @@ We welcome contributions! Here's how:
 - Follow React best practices
 - Use Tailwind CSS for styling
 - Add PropTypes for components
-- Write meaningful commit messages
 
 **Backend:**
 - Follow PEP 8 style guide
@@ -1726,12 +1851,6 @@ We welcome contributions! Here's how:
 - Write docstrings
 - Add unit tests
 - Handle errors gracefully
-
-**Documentation:**
-- Update README.md for new features
-- Add API documentation
-- Include code examples
-- Update CHANGELOG.md
 
 ---
 
@@ -1791,8 +1910,6 @@ SOFTWARE.
 - [x] Random Forest pregnancy risk prediction (97% accuracy)
 - [x] Row-Level Security (RLS)
 - [x] Comprehensive documentation
-- [x] Automated testing suite
-- [x] Production deployment guides
 
 -
 
@@ -1810,12 +1927,6 @@ SOFTWARE.
 - [ ] Health education content
 - [ ] Appointment scheduling
 - [ ] Medication reminders
-- [ ] Family member access
-- [ ] Insurance integration
-- [ ] IoT device integration
-- [ ] Blockchain for health records
-- [ ] AI-powered diagnosis
-- [ ] Virtual health assistant
 - [ ] Global expansion
 - [ ] Research collaboration platform
 
@@ -1824,9 +1935,9 @@ SOFTWARE.
 ## Acknowledgments
 
 ### Technologies
-- **React Team** - For the amazing React framework
-- **FastAPI Team** - For the high-performance Python framework
-- **Supabase Team** - For the excellent PostgreSQL platform
+- **React** - For the amazing React framework
+- **FastAPI** - For the high-performance Python framework
+- **Supabase** - For the excellent PostgreSQL platform
 - **Hugging Face** - For Sentence Transformers models
 - **scikit-learn** - For machine learning tools
 
@@ -1841,11 +1952,6 @@ SOFTWARE.
 -  **Project Supervisor** -Ms. Samiratu Ntohsi for guidance
 - **ALU Research Ethics Committee** - For research ethics clearance
 
----
-
-## Star History
-
-If you find this project helpful, please consider giving it a ⭐ on GitHub!
 
 ---
 
@@ -1853,9 +1959,6 @@ If you find this project helpful, please consider giving it a ⭐ on GitHub!
 
 **Made with ❤️ for Maternal Health**
 
-**Version**: 1.0.0
 **Last Updated**: November 2025
-
-[⬆ Back to Top](#-wombguard---ai-powered-maternal-health-platform)
 
 </div>
