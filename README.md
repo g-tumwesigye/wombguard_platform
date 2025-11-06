@@ -31,7 +31,7 @@
   - [Database Setup](#2-database-setup)
   - [API Documentation](#3-api-documentation)
   - [AI/ML Models](#4-aiml-models-architecture)
-  - [🧠 Model Training & Evaluation](#-model-training--evaluation)
+  - [Model Training & Evaluation](#-model-training--evaluation)
     - [Part 1: Pregnancy Risk Prediction Model](#-part-1-pregnancy-risk-prediction-model)
     - [Part 2: WombGuardBot Conversational AI](#-part-2-wombguardbot-conversational-ai-system)
   - [Security & Authentication](#5-security--authentication)
@@ -58,7 +58,7 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 - **Enable provider collaboration** with role-based dashboards
 - **Ensure data privacy** with Row-Level Security (RLS) and JWT authentication
 
-### Platform Statistics
+### Platform Stats
 - **AI Models**: 4 trained models 
 - **Training Data**: 1,317 patient records + 696 Q&A pairs
 - **Frontend Pages**: 14 responsive pages
@@ -1181,22 +1181,22 @@ Response:
 
 ---
 
-## 🧠 Model Training & Evaluation
+## Model Training & Evaluation
 
-This section provides comprehensive details on the training process, performance metrics, and analysis for both the **Pregnancy Risk Prediction Model** and the **WombGuardBot Conversational AI System**.
+This section provides comprehensive details on the training process, performance metrics, and analysis for both the **Pregnancy Risk Prediction Model** and the **WombGuardBot Conversational ChatBot**.
 
 ---
 
-### 📊 Part 1: Pregnancy Risk Prediction Model
+### Pregnancy Risk Prediction Model
 
 #### Training Notebook
 **File**: `wombguard_predictive_api/wombguard_predictive_models.ipynb`
 
-#### 1.1 Dataset Preparation
+#### Dataset Preparation
 
 **Data Sources:**
 - **Mendeley Dataset**: 1,206 pregnancy records with clinical features
-- **Local Dataset**: 111 pregnancy records from local healthcare facilities
+- **Local Dataset**: 109 pregnancy records from local healthcare facility in Kacyiru, Kigali
 - **Total Merged Dataset**: 1,317 patient records
 
 **Data Merging Strategy:**
@@ -1211,7 +1211,7 @@ This section provides comprehensive details on the training process, performance
 
 **Data Quality Issues Addressed:**
 1. **Age Outlier**: Maximum value of 325 years (data entry error) - removed
-2. **BMI Zeros**: Minimum BMI of 0.0 (impossible values) - removed
+2. **BMI Zeros**: Minimum BMI of 0.0 (impossible value) - removed
 3. **Missing Values**: 22 total across multiple features - rows removed (only 8 final missing values)
 4. **Class Imbalance**: Low Risk: 762 (59%), High Risk: 534 (41%) - handled with `class_weight='balanced'`
 
@@ -1221,7 +1221,7 @@ This section provides comprehensive details on the training process, performance
 3. **Heart Rate**: +0.42 correlation with high risk
 4. **Blood Pressure**: Systolic (+0.27), Diastolic (+0.31)
 
-#### 1.2 Data Preprocessing
+#### Data Preprocessing
 
 **Train/Validation/Test Split:**
 - **Training Set**: 907 samples (70%)
@@ -1235,7 +1235,7 @@ This section provides comprehensive details on the training process, performance
 - **Transform**: Applied to train, validation, and test sets
 - **Result**: Mean ≈ 0, Standard Deviation ≈ 1 for all features
 
-#### 1.3 Model Training & Hyperparameter Tuning
+#### Model Training & Hyperparameter Tuning
 
 **Models Trained:**
 
@@ -1252,18 +1252,18 @@ This section provides comprehensive details on the training process, performance
 - **Random State**: 42 (for reproducibility)
 - **Parallel Processing**: `n_jobs=-1` (uses all CPU cores)
 
-#### 1.4 Model Performance Comparison
+#### Model Performance Comparison
 
 **Validation Set Results:**
 
 | Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
 |-------|----------|-----------|--------|----------|---------|
-| **Random Forest** ✅ | **0.9390** | **0.9200** | **0.9100** | **0.9390** | **0.9750** |
+| **Random Forest** | **0.9390** | **0.9200** | **0.9100** | **0.9390** | **0.9750** |
 | XGBoost | 0.9250 | 0.9050 | 0.8950 | 0.9200 | 0.9680 |
 | K-Nearest Neighbors | 0.8980 | 0.8750 | 0.8650 | 0.8850 | 0.9420 |
 | Support Vector Machine | 0.9150 | 0.8900 | 0.8800 | 0.9050 | 0.9580 |
 
-**Best Model Selected**: **Random Forest Classifier**
+**Best Model Selected**: **Random Forest**
 
 **Best Hyperparameters:**
 ```python
@@ -1277,7 +1277,7 @@ This section provides comprehensive details on the training process, performance
 }
 ```
 
-#### 1.5 Final Test Set Evaluation
+#### Final Test Set Evaluation
 
 **Test Set Performance (195 unseen samples):**
 
@@ -1293,8 +1293,8 @@ This section provides comprehensive details on the training process, performance
 
 |  | Predicted Low Risk | Predicted High Risk |
 |--|-------------------|---------------------|
-| **Actual Low Risk** | 105 (TN) ✅ | 8 (FP) ⚠️ |
-| **Actual High Risk** | 9 (FN) ⚠️ | 70 (TP) ✅ |
+| **Actual Low Risk** | 105 (TN)  | 8 (FP) |
+| **Actual High Risk** | 9 (FN)-there was anissue. | 70 (TP)|
 
 **Clinical Interpretation:**
 - **True Negatives (105)**: Correctly identified low-risk pregnancies - safe to continue routine care
@@ -1307,7 +1307,7 @@ This section provides comprehensive details on the training process, performance
 - **Test F1**: 89.17%
 - **Difference**: -4.73% (moderate drop, indicates reasonable generalization)
 
-#### 1.6 Model Explainability (SHAP Analysis)
+#### Model Explainability (SHAP Analysis)
 
 **SHAP (SHapley Additive exPlanations) Implementation:**
 
@@ -1331,14 +1331,15 @@ This section provides comprehensive details on the training process, performance
 - Magnitude of contribution
 - Personalized clinical insights
 
-### 💬 Part 2: WombGuardBot Conversational AI System
+### WombGuard Conversational ChatBot
 
 #### Training Notebook
 **File**: `wombguardbot_models/the-wombguard-chatbot-training.ipynb`
 
-#### 2.1 Knowledge Base Preparation
-
-**Data Sources:**
+#### Knowledge Base Preparation
+#### Data Source
+- Harvard Dataverse dataset was used for training the WombGuard’s conversational chatbot. https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi%3A10.7910%2FDVN%2FEZLCH3
+**Dataset:**
 - **File 1**: `mother_intents_patterns_responses_data.json` - Intent-based conversational patterns
 - **File 2**: `mother_question_and_answer_pairs_data.json` - Direct Q&A pairs
 - **Total Knowledge Base**: 696 Q&A pairs across multiple maternal health categories
@@ -1362,7 +1363,7 @@ This section provides comprehensive details on the training process, performance
 - **Most Common Question Terms**: pregnancy, baby, during, safe, normal, symptoms, week, trimester
 - **Most Common Answer Terms**: pregnancy, baby, health, important, doctor, symptoms, normal, care, trimester
 
-#### 2.2 Training Data Preparation
+#### Training Data Preparation
 
 **Train/Validation/Test Split:**
 - **Training Set**: 487 Q&A pairs (70%)
@@ -1384,7 +1385,7 @@ InputExample(texts=['question1', 'question2'], label=1.0)  # Positive pair
 InputExample(texts=['question1', 'question3'], label=0.0)  # Negative pair
 ```
 
-#### 2.3 Multi-Model Fine-Tuning
+#### Multi-Model Fine-Tuning
 
 **Pre-trained Models Selected:**
 
@@ -1406,16 +1407,15 @@ InputExample(texts=['question1', 'question3'], label=0.0)  # Negative pair
 | **Batch Size** | 16 | Balance between memory and convergence |
 | **Epochs** | 3 | Prevents overfitting on small dataset |
 | **Warmup Steps** | 100 | Gradual learning rate increase |
-| **Device** | CUDA (GPU) / CPU | Automatic detection |
 
 **Training Process:**
-1. **Model 1 (Medical)**: Fine-tuned on 7,684 contrastive pairs → 3 epochs → ~45 minutes
-2. **Model 2 (General)**: Fine-tuned on 7,684 contrastive pairs → 3 epochs → ~45 minutes
-3. **Model 3 (QA)**: Fine-tuned on 7,684 contrastive pairs → 3 epochs → ~45 minutes
+1. **Model 1 (Medical)**: Fine-tuned on 7,684 contrastive pairs → 3 epochs
+2. **Model 2 (General)**: Fine-tuned on 7,684 contrastive pairs → 3 epochs 
+3. **Model 3 (QA)**: Fine-tuned on 7,684 contrastive pairs → 3 epochs 
 
 **Total Training Time**: ~2.5 hours on GPU
 
-#### 2.4 Hybrid Retrieval System Implementation
+#### Hybrid Retrieval System Implementation
 
 **Ensemble Embedding Strategy:**
 ```python
@@ -1436,19 +1436,19 @@ embeddings_ensemble = (embeddings_medical + embeddings_general + embeddings_qa) 
 - **Weight**: 30% in hybrid score
 - **Advantage**: Exact keyword matching, fast retrieval
 
-**3. Hybrid Scoring Formula:**
+**Hybrid Scoring Formula:**
 ```python
 hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 # alpha = 0.7 (70% semantic, 30% lexical)
 ```
 
-#### 2.5 Performance Evaluation
+#### Performance Evaluation
 
 **Validation Set Results (104 unseen queries):**
 
 | Retrieval Method | Top-1 Accuracy | Top-3 Accuracy | Top-5 Accuracy | Mean Score |
 |------------------|----------------|----------------|----------------|------------|
-| **Hybrid System** ✅ | **89.1% ± 7.9%** | **92.3%** | **94.8%** | **0.891** |
+| **Hybrid System** | **89.1% ± 7.9%** | **92.3%** | **94.8%** | **0.891** |
 | SBERT Ensemble | 78.7% | 85.6% | 89.4% | 0.787 |
 | BM25 Baseline | 14.82 (raw score) | - | - | 0.148 |
 
@@ -1456,13 +1456,13 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 | Retrieval Method | Top-1 Accuracy | Top-3 Accuracy | Top-5 Accuracy | Mean Score |
 |------------------|----------------|----------------|----------------|------------|
-| **Hybrid System** ✅ | **89.1% ± 7.9%** | **92.3%** | **94.8%** | **0.891** |
+| **Hybrid System** | **89.1% ± 7.9%** | **92.3%** | **94.8%** | **0.891** |
 | SBERT Ensemble | 78.7% | 85.6% | 89.4% | 0.787 |
 | BM25 Baseline | 14.82 (raw score) | - | - | 0.148 |
 
-**Performance Consistency**: Validation and test performance are nearly identical, indicating excellent generalization.
+**Performance Consistency**: Validation and test performance were nearly identical and that indicated excellent generalization.
 
-#### 2.6 Out-of-Dataset (OOD) Generalization Test
+#### Out-of-Dataset (OOD) Generalization Test
 
 **Novel Queries (8 unseen maternal health topics):**
 1. "Can I eat sushi during pregnancy?"
@@ -1481,7 +1481,7 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 **Conclusion**: The hybrid system demonstrates robust generalization to completely new topics not seen during training.
 
-#### 2.7 Model Improvement Analysis
+#### Model Improvement Analysis
 
 **Comparison: Zero-Shot vs Fine-Tuned**
 
@@ -1496,7 +1496,7 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 #### 2.8 Production Deployment
 
-**Saved Artifacts:**
+**Saved models:**
 
 | File | Size | Description |
 |------|------|-------------|
@@ -1523,30 +1523,30 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 ---
 
-### 📈 Model Training Summary & Conclusions
+### Model Training Summary & Conclusions
 
 #### Pregnancy Risk Prediction Model
 
-**✅ Achievements:**
-- **91.15% test accuracy** with Random Forest Classifier
+**Achievements:**
+- **91.15% test accuracy** with Random Forest
 - **96.96% ROC-AUC** - excellent discrimination capability
 - **88.61% recall** - captures 88.61% of high-risk pregnancies
 - **SHAP explainability** - transparent, clinically interpretable predictions
 - **Robust generalization** - only 4.73% performance drop from validation to test
 
-**🎯 Clinical Impact:**
+**Clinical Impact:**
 - Identifies 70 out of 79 high-risk pregnancies correctly (88.61% sensitivity)
 - Only 9 false negatives (4.6% of high-risk cases missed)
 - 8 false positives (acceptable for safety - leads to extra monitoring)
 - Blood Sugar, BMI, and Heart Rate are strongest risk predictors
 
-**⚠️ Limitations:**
+**Limitations:**
 - Limited to 7 clinical features (could benefit from more features)
 - Dataset size: 1,296 records (larger dataset could improve performance)
 - Binary classification (Low/High) - could benefit from multi-class (Low/Medium/High)
 - No temporal data (pregnancy progression over time)
 
-**🔮 Future Improvements:**
+**Future Improvements:**
 - Expand dataset to 5,000+ records
 - Add more features: previous pregnancy history, genetic factors, lifestyle data
 - Implement multi-class risk levels (Low/Medium/High/Critical)
@@ -1555,33 +1555,31 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 ---
 
-#### WombGuardBot Conversational AI
+#### WombGuard Conversationa ChatBot
 
-**✅ Achievements:**
+**Achievements:**
 - **89.1% Top-1 accuracy** on unseen test queries
 - **94.8% Top-5 accuracy** - correct answer in top 5 results
 - **81.0% OOD performance** - generalizes to completely new topics
 - **3 specialized models** - medical, general, and QA expertise
-- **Hybrid retrieval** - combines semantic understanding + keyword matching
+- **Hybrid retrieval** - combines semantic understanding and keyword matching
 
-**🎯 User Impact:**
-- Provides accurate maternal health information 24/7
+**User Impact:**
+- Provides maternal health information 24/7
 - Handles 696 different pregnancy-related topics
 - Responds in < 500ms (fast, real-time interaction)
 - Fallback rate < 2% (rarely fails to find relevant answer)
 - Supports paraphrasing and natural language variations
 
-**⚠️ Limitations:**
+**Limitations:**
 - Knowledge base limited to 696 Q&A pairs (could expand to 5,000+)
-- No multi-turn conversation (each query is independent)
-- No personalization (doesn't remember user context)
 - English only (no multi-language support yet)
 - Static knowledge (doesn't learn from new interactions)
 
-**🔮 Future Improvements:**
+**Future Improvements:**
 - Expand knowledge base to 5,000+ Q&A pairs
 - Implement multi-turn conversation with context memory
-- Add personalization based on user profile (age, trimester, risk level)
+- Add personalization based on user profile (age, trimester or the risk level)
 - Multi-language support (Kinyarwanda, French, Swahili)
 - Continuous learning from user feedback
 - Integration with real-time medical databases
@@ -1589,22 +1587,21 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 ---
 
-### 🏆 Overall Model Performance Summary
+### Overall Model Performance Summary
 
 | Model Component | Accuracy | Key Strength | Production Status |
 |----------------|----------|--------------|-------------------|
-| **Pregnancy Risk Prediction** | 91.15% | SHAP explainability | ✅ Deployed |
-| **WombGuardBot (Hybrid)** | 89.1% (Top-1) | Multi-model ensemble | ✅ Deployed |
-| **Combined System** | 90%+ | Comprehensive maternal health support | ✅ Production-ready |
+| **Pregnancy Risk Prediction** | 91.15% | SHAP explainability | Deployed |
+| **WombGuardBot (Hybrid)** | 89.1% (Top-1) | Multi-model ensemble | Deployed |
+| **Combined System** | 90%+ | Comprehensive maternal health support | Production-ready |
 
-**Total Training Time**: ~5 hours (2.5 hours chatbot + 2.5 hours prediction model)
 **Total Model Size**: ~1.33 GB (1.32 GB chatbot + 1 MB prediction model)
 **Inference Speed**: < 500ms (both models)
 **Deployment Platform**: Render.com (Backend API)
 
 ---
 
-### 5. Security & Authentication
+### Security & Authentication
 
 #### Authentication System
 
@@ -1612,7 +1609,6 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 - **Algorithm**: HS256
 - **Token Type**: Bearer
 - **Expiration**: 30 minutes (configurable)
-- **Refresh**: Not implemented (future feature)
 
 **Token Structure:**
 ```json
@@ -1643,13 +1639,13 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 
 #### Security Features
 
-**1. Row-Level Security (RLS)**
+**Row-Level Security (RLS)**
 - Enabled on all tables
 - Users can only access their own data
 - Healthcare workers can access all patient data
 - Admins have full access
 
-**2. CORS Protection**
+**CORS Protection**
 ```python
 origins = [
     "http://localhost:3000",
@@ -1657,23 +1653,23 @@ origins = [
 ]
 ```
 
-**3. Input Validation**
+**Input Validation**
 - Pydantic models for all endpoints
 - Type checking
 - Range validation
 - SQL injection prevention
 
-**4. Environment Variables**
+**Environment Variables**
 - Sensitive data in .env files
 - .env files in .gitignore
 - .env.example as template
 
-**5. HTTPS Ready**
+**HTTPS Ready**
 - SSL/TLS support
 - Secure cookie flags
 - HSTS headers (production)
 
-**6. Rate Limiting** (Not Implemented)
+**Rate Limiting** (will be impleted/added in futue)
 ```python
 # Future implementation
 from slowapi import Limiter
@@ -1683,36 +1679,6 @@ limiter = Limiter(key_func=get_remote_address)
 @limiter.limit("10/minute")
 async def predict(...):
     ...
-```
-
-#### Best Practices
-
-**For Development:**
-- Use .env files
-- Never commit secrets
-- Use strong JWT secret (32+ chars)
-- Enable CORS only for trusted origins
-- Validate all inputs
-
-**For Production:**
-- Use HTTPS only
-- Enable rate limiting
-- Implement refresh tokens
-- Add API key rotation
-- Enable audit logging
-- Use secrets manager (AWS Secrets Manager, etc.)
-- Implement 2FA (future)
-- Add IP whitelisting (if applicable)
-
----
-
-### 6. Testing Guide
-
-#### Automated Testing
-
-**Run Comprehensive Tests:**
-```bash
-bash test_comprehensive.sh
 ```
 
 **Tests Included:**
@@ -1725,41 +1691,8 @@ bash test_comprehensive.sh
 7. Frontend Health Check
 8. Data Validation
 
-**Expected Output:**
-```
-WombGuard Comprehensive Testing 
 
- Testing Backend Health...
- PASS - Backend is running
-
- Testing API Documentation...
- PASS - API docs accessible
-
- Testing Chatbot (General)...
- PASS - Chatbot responding
-
- Testing Chatbot (Medical)...
- PASS - Medical model working
-
- Testing Prediction (Low Risk)...
- PASS - Prediction successful
-
- Testing Prediction (High Risk)...
- PASS - High risk detected
-
- Testing Frontend...
- PASS - Frontend running
-
- Testing Data Validation...
- PASS - Validation working
-
-=== Test Results ===
-Passed: 8/8 (100%)
-Failed: 0/8 (0%)
-Status:  ALL TESTS PASSED
-```
-
-#### Manual Testing
+#### Testing
 
 **Test 1: User Registration**
 ```bash
@@ -1800,7 +1733,7 @@ curl -X POST "http://localhost:8000/predict?user_email=test@example.com" \
   }'
 ```
 
-**Test 4: AI Chatbot**
+**Test 4: WombGuard Chatbot**
 ```bash
 curl -X POST http://localhost:8000/chat \
   -H "Content-Type: application/json" \
@@ -1813,16 +1746,18 @@ curl -X POST http://localhost:8000/chat \
 ```
 
 **Test 5: Frontend Pages**
-- Landing: http://localhost:3000/
-- Login: http://localhost:3000/login
-- Register: http://localhost:3000/register
-- Dashboard: http://localhost:3000/dashboard
-- Chatbot: http://localhost:3000/chatbot
-- Prediction: http://localhost:3000/prediction
+- Landing: https://wombguard-platform.onrender.com/
+- Login: https://wombguard-platform.onrender.com/login
+- Register: https://wombguard-platform.onrender.com/register
+- Preg_Woman_Dashboard: https://wombguard-platform.onrender.com/pregnant-dashboard
+- Chatbot: https://wombguard-platform.onrender.com/chat
+- Healthcare_Provider_Dashbard: https://wombguard-platform.onrender.com/healthcare-dashboard
+- System_Admin_Dashboard: https://wombguard-platform.onrender.com/admin-dashboard
+- Prediction: https://wombguard-platform.onrender.com/prediction
 
 #### Test Results (Latest Run)
 
-**Date**: 2025-11-01
+**Date**: 2025-11-06
 **Status**: 100% Pass Rate
 **Tests**: 8/8 Passed
 **Performance**: All < 500ms response time
@@ -1840,146 +1775,42 @@ curl -X POST http://localhost:8000/chat \
 
 ---
 
-### 7. Deployment Guide
+### 7. Deployment
 
-#### Recommended Deployment Stack
+#### Deployment Stack
 
-| Component | Platform | Cost | Reason |
-|-----------|----------|------|--------|
-| **Frontend** | Vercel | Free | Automatic deployments, CDN, HTTPS |
-| **Backend** | Railway | $5/mo | Python support, easy setup, auto-scaling |
-| **Database** | Supabase | Free | Already configured, RLS, Auth |
+| Component | Platform | Cost | 
+|-----------|----------|------|
+| **Frontend** | Render | Free | 
+| **Backend** | Render | $25/mo | 
+| **Database** | Supabase | Free |
 
-**Total Cost**: $5/month (Free tier available for all)
-
----
-
-#### Frontend Deployment (Vercel)
-
-**Step 1: Prepare for Deployment**
-```bash
-# Build the frontend
-npm run build
-
-# Test the build locally
-npx serve -s build
-```
-
-**Step 2: Deploy to Vercel**
-
-Option A - Vercel CLI:
-```bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Login
-vercel login
-
-# Deploy
-vercel
-
-# Follow prompts:
-# - Set up and deploy? Yes
-# - Which scope? Your account
-# - Link to existing project? No
-# - Project name? wombguard-platform
-# - Directory? ./
-# - Override settings? No
-```
-
-Option B - Vercel Dashboard:
-1. Go to [vercel.com](https://vercel.com)
-2. Click "New Project"
-3. Import from GitHub
-4. Select `wombguard_platform` repository
-5. Configure:
-   - Framework Preset: Create React App
-   - Build Command: `npm run build`
-   - Output Directory: `build`
-6. Add Environment Variables:
-   ```
-   REACT_APP_SUPABASE_URL=your_supabase_url
-   REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
-7. Click "Deploy"
-
-**Step 3: Configure Custom Domain** (Optional)
-1. Go to Project Settings → Domains
-2. Add your domain
-3. Update DNS records as instructed
-
-**Deployment URL**: `https://wombguard-platform.vercel.app`
+**Total Cost**: $25/month (Render Standard premium tier)
 
 ---
 
-#### Backend Deployment (Railway)
+**Deployed**
+- Deployment URL: `https://wombguard-platform.onrender.com`
 
-**Step 1: Prepare Backend**
+**Frontend**- The Frontend was upadted accordingly
 
-Create `Procfile` in `wombguard_predictive_api/`:
-```
-web: uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
-Create `runtime.txt` in `wombguard_predictive_api/`:
-```
-python-3.9.18
-```
-
-Update `requirements.txt` to include:
-```
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-# ... rest of dependencies
-```
-
-**Step 2: Deploy to Railway**
-
-1. Go to [railway.app](https://railway.app)
-2. Click "New Project"
-3. Select "Deploy from GitHub repo"
-4. Select `wombguard_platform` repository
-5. Configure:
-   - Root Directory: `wombguard_predictive_api`
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-
-**Step 3: Add Environment Variables**
-
-In Railway Dashboard → Variables:
-```
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_service_role_key
-JWT_SECRET_KEY=your_jwt_secret_key_min_32_chars
-JWT_ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-PORT=8000
-```
-
-**Step 4: Deploy**
-- Railway will automatically deploy
-- Get deployment URL: `https://wombguard-api.up.railway.app`
-
-**Step 5: Update Frontend**
-
-Update frontend API URL in `src/services/apiService.js`:
+Updating frontend API URL in `src/services/apiService.js`:
 ```javascript
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://wombguard-api.up.railway.app';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://wombguard-platform.onrender.com';
+```
+Render environment variables:
+```
+REACT_APP_API_URL=https://wombguard-platform.onrender.com
 ```
 
-Add to Vercel environment variables:
-```
-REACT_APP_API_URL=https://wombguard-api.up.railway.app
-```
-
-**Step 6: Update CORS**
+**CORS Update**
 
 Update `main.py` CORS origins:
 ```python
 origins = [
     "http://localhost:3000",
-    "https://wombguard-platform.vercel.app",
-    "https://your-custom-domain.com"
+    "https://wombguard-platform.onrender.com",
+    "https://your-custom-domain.com/i didn't use a custom domain"
 ]
 ```
 
@@ -1989,10 +1820,10 @@ origins = [
 
 **Already Deployed!** 
 
-Supabase is cloud-hosted, so no additional deployment needed.
+Supabase is cloud-hosted.
 
 **Production Checklist:**
-- All tables created
+- All were tables created
 - RLS policies enabled
 - API keys secured
 - Backups enabled (automatic)
@@ -2064,130 +1895,6 @@ jobs:
 - Backups enabled
 - Connection pooling configured
 
-**Testing:**
-```bash
-# Test production frontend
-curl https://wombguard-platform.vercel.app
-
-# Test production backend
-curl https://wombguard-api.up.railway.app/
-
-# Test API docs
-open https://wombguard-api.up.railway.app/docs
-
-# Test prediction endpoint
-curl -X POST https://wombguard-api.up.railway.app/predict \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{"Age": 28, "SystolicBP": 120, ...}'
-```
-
----
-
-### 8. Troubleshooting
-
-#### Common Issues & Solutions
-
-**Issue 1: API Connection Failed**
-```
-Error: Network Error / CORS Error
-```
-**Solutions:**
-- Check backend is running: `curl http://localhost:8000/`
-- Verify CORS settings in `main.py`
-- Check frontend API URL in `apiService.js`
-- Ensure backend port 8000 is not blocked
-
-**Issue 2: Supabase Connection Error**
-```
-Error: Invalid Supabase credentials
-```
-**Solutions:**
-- Verify `.env` file exists
-- Check Supabase URL and keys are correct
-- Ensure no extra spaces in `.env` values
-- Restart servers after changing `.env`
-
-**Issue 3: Model Loading Error**
-```
-Error: [Errno 2] No such file or directory: 'wombguard_pregnancy_model.pkl'
-```
-**Solutions:**
-- Verify model file exists in `wombguard_predictive_api/`
-- Check file permissions
-- Ensure working directory is correct
-- Re-download model if corrupted
-
-**Issue 4: Chatbot Not Responding**
-```
-Error: Model not loaded / No response
-```
-**Solutions:**
-- Check all 3 models exist in `wombguardbot_models/`
-- Verify `bm25_index.pkl` and `embeddings_ensemble.npy` exist
-- Check backend logs for model loading errors
-- Ensure sufficient RAM (4GB+ recommended)
-
-**Issue 5: JWT Token Invalid**
-```
-Error: 401 Unauthorized / Invalid token
-```
-**Solutions:**
-- Check JWT_SECRET_KEY is set in backend `.env`
-- Ensure token hasn't expired (30 min default)
-- Verify token is sent in Authorization header
-- Re-login to get new token
-
-**Issue 6: Email Verification Not Working**
-```
-Error: Email not sent / Verification failed
-```
-**Solutions:**
-- Check Supabase email settings
-- Verify SMTP configuration in Supabase
-- Check spam folder
-- Ensure verification_token is generated
-
-**Issue 7: Frontend Build Fails**
-```
-Error: npm run build fails
-```
-**Solutions:**
-- Delete `node_modules/` and `package-lock.json`
-- Run `npm install` again
-- Check Node.js version (16+ required)
-- Clear npm cache: `npm cache clean --force`
-
-**Issue 8: Backend Dependencies Error**
-```
-Error: ModuleNotFoundError
-```
-**Solutions:**
-- Activate virtual environment: `source venv/bin/activate`
-- Install dependencies: `pip install -r requirements.txt`
-- Check Python version (3.9+ required)
-- Upgrade pip: `pip install --upgrade pip`
-
-**Issue 9: Database RLS Blocking Access**
-```
-Error: Permission denied / RLS policy violation
-```
-**Solutions:**
-- Check user role is correct
-- Verify RLS policies in Supabase
-- Ensure user is authenticated
-- Check user_id matches in requests
-
-**Issue 10: High Memory Usage**
-```
-Error: Out of memory / Process killed
-```
-**Solutions:**
-- Increase system RAM
-- Use smaller AI models (if available)
-- Implement model lazy loading
-- Use cloud deployment with more resources
-
 ---
 
 ## Performance Metrics
@@ -2209,7 +1916,6 @@ Error: Out of memory / Process killed
 - Lazy loading for routes
 - Image optimization
 - Minification enabled
-- Service worker (future)
 
 **Backend:**
 - Async endpoints
@@ -2244,7 +1950,7 @@ We welcome contributions! Here's how:
    ```
 5. **Commit your changes**
    ```bash
-   git commit -m "Add amazing feature"
+   git commit -m "add amazing feature"
    ```
 6. **Push to your fork**
    ```bash
@@ -2299,10 +2005,10 @@ SOFTWARE.
 
 ### Contact Information
 
-- **Email**: support@wombguard.com
+- **Email**: g.tumwesigy@alustudent.com
 - **Issues**: [GitHub Issues](https://github.com/g-tumwesigye/wombguard_platform/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/g-tumwesigye/wombguard_platform/discussions)
-- **Phone**: +250 788 123 456 (Rwanda)
+- **Phone**: +250 7833........ (Rwanda)
 
 ### Support Hours
 
@@ -2313,9 +2019,7 @@ SOFTWARE.
 
 ---
 
-## Roadmap
-
-### Completed (v1.0.0)
+### Completed 
 - [x] React 18 frontend with 14 pages
 - [x] FastAPI backend with 30+ endpoints
 - [x] Supabase PostgreSQL database
