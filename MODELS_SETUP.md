@@ -1,12 +1,12 @@
-# 🤖 WombGuard AI Models Setup Guide
+# WombGuard Models (Conversational ChatBot Models) Setup Guide
 
-## 📦 **Model Files Required**
+## **Model Files Required**
 
-The WombGuard Platform uses **3 large AI models** for the chatbot functionality. These models are **NOT included in the git repository** due to their size (418 MB each, ~1.2 GB total).
+The WombGuard Platform uses **3 large models** for the chatbot functionality. These models are **not included in the git repository** due to their size (418 MB each, ~1.2 GB total).
 
 ---
 
-## 📥 **Download Models from GitHub Releases**
+## **Download Models from GitHub Releases**
 
 ### **Step 1: Download Model Files**
 
@@ -84,7 +84,7 @@ INFO: Loaded model_qa_finetuned
 
 ---
 
-## 🔧 **Alternative: Manual Download**
+## **Alternative: Manual Download**
 
 If you have the original model files, place them manually:
 
@@ -99,7 +99,7 @@ If you have the original model files, place them manually:
 
 ---
 
-## ❓ **Troubleshooting**
+## **Common Issues & **Troubleshooting**
 
 ### **Models Not Loading**
 - Check file paths match the structure above
@@ -118,7 +118,7 @@ If you have the original model files, place them manually:
 
 ---
 
-## 📊 **Model Information**
+## **Model Information**
 
 | Model | Size | Purpose |
 |-------|------|---------|
@@ -130,16 +130,14 @@ If you have the original model files, place them manually:
 
 ---
 
-## 🚀 **Why Models Are Separate**
+## **Why did I upload Models to Github Releases**
 
 - GitHub has a 100 MB file size limit for regular commits
-- Large files slow down git operations
-- Users who only want to view code don't need to download models
-- Easier to update models independently
+
 
 ---
 
-## 📝 **For Developers**
+## **For Developers**
 
 If you're training new models or updating existing ones:
 
@@ -156,15 +154,12 @@ If you're training new models or updating existing ones:
 
 ---
 
-## ✅ **Next Steps**
+## **Next Steps**
 
 After models are installed:
-1. ✅ Follow the main [README.md](README.md) for full setup
-2. ✅ Install Python dependencies
-3. ✅ Configure environment variables
-4. ✅ Run the application
+1. Follow the main [README.md](README.md) for full setup
+2. Install Python dependencies
+3. Configure environment variables
+4. Run the application
 
----
-
-**Need help?** Open an issue on GitHub or contact the maintainers.
 
