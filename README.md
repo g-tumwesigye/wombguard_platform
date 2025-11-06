@@ -308,7 +308,6 @@ wombguard_platform/
 
 ###  Key Directories Explained
 
-- **`docs/`** - All documentation files (API, deployment, security, testing)
 - **`database/`** - SQL scripts for database setup and migrations
 - **`src/`** - React frontend source code
 - **`wombguard_predictive_api/`** - FastAPI backend with ML models
@@ -969,8 +968,6 @@ Supabase is cloud-hosted.
 | File/Directory | Description | Purpose |
 |----------------|-------------|---------|
 | **`README.md`** | Main documentation | Project overview, setup instructions, and usage guide |
-| **`START_HERE.md`** | Quick start guide | Step-by-step setup for new developers |
-| **`LICENSE`** | MIT License | Legal terms and conditions |
 | **`.gitignore`** | Git ignore rules | Files excluded from version control |
 | **`.env.example`** | Environment template | Sample configuration for environment variables |
 
