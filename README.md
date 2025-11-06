@@ -94,6 +94,32 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 - **Performance Monitoring** - System health and metrics
 
 ---
+## Dataset
+---
+For the WombGuard platform I combined three data sources to build the predictive model and the conversational ChatBot & as well to inform the system design:
+Public datasets -  Publicly available, anonymized maternal health datasets from Mendeley Data (for the predictive models) and Harvard Dataverse Repo (for the conversational chatbot).
+
+Local clinical records (EMR):  Anonymized maternal records accessed from an operational local healthcare facility in Rwanda and extracted using a structured template, for the predictive models as wel. 
+
+User design survey: A short Google Form was used to gather community and user perceptions that informed the system features and UX.
+
+A CSV template (primary extraction):
+ I recorded local data into the prepared CSV template. The template and column definitions are available here:
+ WombGuard Data Collection Template (Google Sheet): https://docs.google.com/spreadsheets/d/1p7iD4r-x2Miasu0wY60UhSl6_YymYmpQ/edit?gid=884275186
+
+ Key columns in the template:
+ Age, Systolic_BP, Diastolic, BS, Body_Temp_F, Weight_kg, Height_m, Complications_Notes, Heart_Rate, Risk_Level
+
+
+Google Form (user needs/design survey):
+ I designed a single-section survey to collect anonymous user insights that guided WombGuard’s design. The form which was used is here:
+ https://docs.google.com/forms/d/e/1FAIpQLSdCFOdS9nf4GoceC5oqH8KauKKmyKRDKM087AhwJ9R6NMo4iA/viewform?usp=header
+
+
+Public dataset sources:
+Mendeley Data (public maternal health datasets), it was used to train the predictive models.
+https://data.mendeley.com/datasets/p5w98dvbbk/1
+Harvard Dataverse Dataset, it was used for training the WombGuard’s conversational chatbot. https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi%3A10.7910%2FDVN%2FEZLCH3
 
 ## Platform Screenshots
 
@@ -316,8 +342,10 @@ wombguard_platform/
 ---
 
 ### Models Architecture
+![WombGuardBot Models Architecture](public/screenshots/wombguardbot_models.png)
+*WombGuardBot Architecture*
 
-#### WombGuardBot System (3 Specialized Models)
+#### WombGuard Conversational ChatBot(3 Specialized Models)
 
 **Architecture Overview:**
 - **Base Model**: Sentence Transformers (all-MiniLM-L6-v2)
@@ -326,6 +354,8 @@ wombguard_platform/
 - **Retrieval Method**: Hybrid (Semantic + BM25)
 - **Knowledge Base**: 696 Q&A pairs
 - **Performance**: 98% accuracy
+- ![WombGuardBot Performance](public/screenshots/performance_evaluation.png)
+*WombGuardBot Performanbce Evaluation*
 
 **Model 1: General Chatbot** (`model_general_finetuned`)
 - **Purpose**: General pregnancy questions
@@ -602,6 +632,7 @@ This section provides comprehensive details on the training process, performance
 **File**: `wombguardbot_models/the-wombguard-chatbot-training.ipynb`
 
 #### Knowledge Base Preparation
+
 #### Data Source
 - Harvard Dataverse dataset was used for training the WombGuard’s conversational chatbot. https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi%3A10.7910%2FDVN%2FEZLCH3
 **Dataset:**
