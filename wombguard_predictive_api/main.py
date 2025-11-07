@@ -1067,7 +1067,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
         users_response = supabase.table("users").select("id, email, phone, name").execute()
         users_data = users_response.data or []
 
-        # Creating a mapping of email to phone number
+        # Create a mapping of email to phone number
         email_to_phone = {}
         email_to_name = {}
         id_to_phone = {}
@@ -1086,6 +1086,8 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                 id_to_phone[user_id] = normalized_phone
                 id_to_name[user_id] = name
 
+        contact_lookup_cache = {}
+
         def resolve_contact(user_id, email):
             normalized_email = (email or "").strip().lower()
             phone = email_to_phone.get(normalized_email)
@@ -1094,6 +1096,45 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
             if user_id:
                 phone = phone if phone and phone != "N/A" else id_to_phone.get(user_id, phone)
                 name = name or id_to_name.get(user_id)
+
+            # If still missing, fetch directly from Supabase and cache the result
+            cache_key = user_id or normalized_email
+            if cache_key and cache_key in contact_lookup_cache:
+                cached_name, cached_phone = contact_lookup_cache[cache_key]
+                if cached_name:
+                    name = cached_name
+                if cached_phone and cached_phone != "N/A":
+                    phone = cached_phone
+
+            if (not phone or phone == "N/A") and cache_key and cache_key not in contact_lookup_cache:
+                try:
+                    query = supabase.table("users").select("id, phone, name")
+                    if user_id:
+                        query = query.eq("id", user_id)
+                    else:
+                        query = query.eq("email", normalized_email)
+                    user_response = query.limit(1).execute()
+                    if user_response.data:
+                        fetched = user_response.data[0]
+                        fetched_phone = (fetched.get("phone") or "").strip()
+                        fetched_name = fetched.get("name") or "Unknown"
+                        normalized_phone = fetched_phone if fetched_phone else "N/A"
+
+                        email_to_phone[normalized_email] = normalized_phone
+                        email_to_name[normalized_email] = fetched_name
+
+                        fetched_id = fetched.get("id")
+                        if fetched_id:
+                            id_to_phone[fetched_id] = normalized_phone
+                            id_to_name[fetched_id] = fetched_name
+
+                        phone = normalized_phone
+                        name = fetched_name
+                        contact_lookup_cache[cache_key] = (name, phone)
+                except Exception as fetch_error:
+                    logger.warning(
+                        f" Could not resolve contact details for {normalized_email or user_id}: {fetch_error}"
+                    )
 
             if not phone or not phone.strip():
                 phone = "N/A"
