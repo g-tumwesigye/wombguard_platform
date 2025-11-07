@@ -15,13 +15,16 @@ const Chatbot = () => {
   // Initializing conversation
   useEffect(() => {
   const initializeConversation = async () => {
-  if (user?.id) {
+  // Generate conversation ID for both authenticated and anonymous users
+  const userId = user?.id || 'anonymous';
+  
   try {
-  const response = await chatbotService.startNewConversation(user.id);
+  const response = await chatbotService.startNewConversation(userId);
   setConversationId(response.conversation_id);
   } catch (err) {
   console.error('Failed to initialize conversation:', err);
-  }
+  // Fallback: generate a local conversation ID if backend fails
+  setConversationId(`local-${Date.now()}`);
   }
 
   // Adding welcome message
