@@ -618,7 +618,9 @@ const HealthcareWorkerDashboard = () => {
   <table className="w-full">
   <thead>
   <tr className="border-b border-neutral-200">
+  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-900">Patient Name</th>
   <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-900">Patient Email</th>
+  <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-900">Phone</th>
   <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-900">Risk Level</th>
   <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-900">Probability</th>
   <th className="text-left py-3 px-4 text-sm font-semibold text-neutral-900">Date</th>
@@ -627,7 +629,17 @@ const HealthcareWorkerDashboard = () => {
   <tbody>
   {(dashboardData?.all_assessments || []).map((assessment, index) => (
   <tr key={index} className="border-b border-neutral-100 hover:bg-neutral-50">
+  <td className="py-3 px-4 text-sm text-neutral-900">{assessment.patient_name || 'Unknown'}</td>
   <td className="py-3 px-4 text-sm text-neutral-900">{assessment.user_email}</td>
+  <td className="py-3 px-4 text-sm text-neutral-900">
+  {assessment.phone && assessment.phone !== 'N/A' ? (
+  <a href={`tel:${assessment.phone}`} className="text-primary-600 hover:underline">
+  {assessment.phone}
+  </a>
+  ) : (
+  <span className="text-neutral-500">N/A</span>
+  )}
+  </td>
   <td className="py-3 px-4">
   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
   assessment.predicted_risk?.toLowerCase().includes('high')

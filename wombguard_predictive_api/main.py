@@ -1033,7 +1033,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
             .order("created_at", desc=True)
             .execute()
         )
-        predictions = predictions_response.data or []
+        predictions_raw = predictions_response.data or []
 
         # Fetch all users to get phone numbers
         users_response = supabase.table("users").select("email, phone, name").execute()
@@ -1046,6 +1046,17 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
             email = user.get("email", "").lower()
             email_to_phone[email] = user.get("phone", "N/A")
             email_to_name[email] = user.get("name", "Unknown")
+
+        # Enrich predictions with patient contact details for quick reference
+        predictions = []
+        for record in predictions_raw:
+            email = (record.get("user_email") or "").lower()
+            enriched_record = {
+                **record,
+                "patient_name": email_to_name.get(email, "Unknown"),
+                "phone": email_to_phone.get(email, "N/A")
+            }
+            predictions.append(enriched_record)
 
         # Calculate statistics
         total_patients = len(set(p.get("user_email")
