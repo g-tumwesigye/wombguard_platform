@@ -424,8 +424,31 @@ def predict(features: PatientData, user_email: str = Query(...,
 
         # Save prediction in Supabase with all vital signs
         try:
-            supabase.table("predictions").insert({
-                "user_email": user_email.strip().lower(),
+            normalized_email = user_email.strip().lower()
+
+            # Try to fetch user metadata so we can link the prediction back to the account
+            user_record = None
+            try:
+                user_lookup = (
+                    supabase.table("users")
+                    .select("id, phone, name")
+                    .eq("email", normalized_email)
+                    .limit(1)
+                    .execute()
+                )
+                if user_lookup.data:
+                    user_record = user_lookup.data[0]
+                else:
+                    logger.warning(
+                        f" No matching user found for prediction email {normalized_email}"
+                    )
+            except Exception as user_fetch_error:
+                logger.warning(
+                    f" Could not fetch user record for {normalized_email}: {user_fetch_error}"
+                )
+
+            prediction_payload = {
+                "user_email": normalized_email,
                 "predicted_risk": risk_label,
                 "probability": probability,
                 "confidence_score": round(max(probability, 1 - probability), 4),
@@ -440,7 +463,12 @@ def predict(features: PatientData, user_email: str = Query(...,
                 "explanation": summary_text,
                 "role": "pregnant_woman",
                 "created_at": datetime.utcnow().isoformat()
-            }).execute()
+            }
+
+            if user_record and user_record.get("id"):
+                prediction_payload["user_id"] = user_record["id"]
+
+            supabase.table("predictions").insert(prediction_payload).execute()
         except Exception as e:
             print(f" Warning: Could not store prediction: {e}")
 
@@ -1011,7 +1039,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
     Returns: all pregnant women, assessments, high-risk alerts, consultation requests, and statistics.
     """
     try:
-        # SECURITY FIX: Get current user and verify healthcare provider or
+        # Getting current user and verifying healthcare provider or
         # admin role
         user_response = supabase.table("users").select(
             "*").eq("email", user_email.lower()).execute()
@@ -1020,13 +1048,13 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
 
         current_user = user_response.data[0]
 
-        # SECURITY FIX: Check if user is healthcare provider or admin
+        # Checking if user is healthcare provider or admin
         require_healthcare_provider(current_user)
 
         logger.info(
             f" Healthcare provider {user_email} accessed healthcare dashboard")
 
-        # Fetch all predictions (all pregnant women's assessments)
+        # Fetching all predictions (all pregnant women's assessments)
         predictions_response = (
             supabase.table("predictions")
             .select("*")
@@ -1035,11 +1063,11 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
         )
         predictions_raw = predictions_response.data or []
 
-        # Fetch all users to get phone numbers
+        # Fetching all users to get phone numbers
         users_response = supabase.table("users").select("email, phone, name").execute()
         users_data = users_response.data or []
 
-        # Create a mapping of email to phone number
+        # Creating a mapping of email to phone number
         email_to_phone = {}
         email_to_name = {}
         for user in users_data:
@@ -1058,7 +1086,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
             }
             predictions.append(enriched_record)
 
-        # Calculate statistics
+        # Calculating statistics
         total_patients = len(set(p.get("user_email")
                              for p in predictions if p.get("user_email")))
         total_assessments = len(predictions)
@@ -1071,7 +1099,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                 "predicted_risk",
                 "").lower().startswith("low"))
 
-        # Calculate weekly activity (last 7 days)
+        # Calculating weekly activity (last 7 days)
         from datetime import datetime, timedelta
         today = datetime.utcnow()
         weekly_data = {}
@@ -1087,7 +1115,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
             )
             weekly_data[day_name] = day_count
 
-        # Get high-risk patients (most recent assessment per patient)
+        # Getting high-risk patients (most recent assessment per patient)
         patient_latest = {}
         for pred in predictions:
             email = pred.get("user_email")
@@ -1107,7 +1135,7 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                 p["patient_name"] = email_to_name.get(email, "Unknown")
                 high_risk_patients.append(p)
 
-        # HEALTHCARE ENHANCEMENT: Get recently improved patients (was high-risk, now low-risk)
+        # Getting recently improved patients (was high-risk, now low-risk)
         from datetime import datetime, timedelta
         recently_improved = []
         seven_days_ago = (datetime.utcnow() - timedelta(days=7)).isoformat()
@@ -1125,8 +1153,8 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                     if assessment.get("predicted_risk", "").lower().startswith("high"):
                         created_at = assessment.get("created_at", "")
                         if created_at > seven_days_ago:
-                            # Found a recent high-risk assessment
-                            # Get the improvement metrics
+                    
+                            # Getting the improvement metrics
                             prev_prob = assessment.get("probability", 0)
                             curr_prob = latest_pred.get("probability", 0)
                             improvement = ((prev_prob - curr_prob) / prev_prob * 100) if prev_prob > 0 else 0
@@ -1493,11 +1521,13 @@ def admin_create_user(user: UserRegister):
     """
     try:
         hashed_password = hash_password(user.password)
+        phone = user.phone.strip()
         user_data = {
             "name": user.name.strip(),
             "email": user.email.strip().lower(),
             "password": hashed_password,
-            "role": user.role.strip().lower()
+            "role": user.role.strip().lower(),
+            "phone": phone
         }
 
         # Check if user already exists
@@ -1507,6 +1537,14 @@ def admin_create_user(user: UserRegister):
             raise HTTPException(
                 status_code=400,
                 detail="User with this email already exists")
+
+        # Prevent duplicate phone numbers so healthcare providers can reach patients reliably
+        phone_existing = supabase.table("users").select(
+            "*").eq("phone", phone).execute()
+        if phone_existing.data:
+            raise HTTPException(
+                status_code=400,
+                detail="User with this phone number already exists")
 
         # Insert new user
         response = supabase.table("users").insert(user_data).execute()
