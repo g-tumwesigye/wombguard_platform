@@ -97,6 +97,7 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 ## Dataset
 ---
 - For the WombGuard platform I combined three data sources to build the predictive model and the conversational ChatBot & as well to inform the system design:
+
 Public datasets -  Publicly available, anonymized maternal health datasets from Mendeley Data (for the predictive models) and Harvard Dataverse Repo (for the conversational chatbot).
 
 - Local clinical records (EMR):  Anonymized maternal records accessed from an operational local healthcare facility in Rwanda and extracted using a structured template, for the predictive models as wel. 
