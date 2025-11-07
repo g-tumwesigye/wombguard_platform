@@ -96,27 +96,27 @@ To reduce maternal mortality rates through early risk detection, continuous moni
 ---
 ## Dataset
 ---
-For the WombGuard platform I combined three data sources to build the predictive model and the conversational ChatBot & as well to inform the system design:
+- For the WombGuard platform I combined three data sources to build the predictive model and the conversational ChatBot & as well to inform the system design:
 Public datasets -  Publicly available, anonymized maternal health datasets from Mendeley Data (for the predictive models) and Harvard Dataverse Repo (for the conversational chatbot).
 
-Local clinical records (EMR):  Anonymized maternal records accessed from an operational local healthcare facility in Rwanda and extracted using a structured template, for the predictive models as wel. 
+- Local clinical records (EMR):  Anonymized maternal records accessed from an operational local healthcare facility in Rwanda and extracted using a structured template, for the predictive models as wel. 
 
-User design survey: A short Google Form was used to gather community and user perceptions that informed the system features and UX.
+- User design survey: A short Google Form was used to gather community and user perceptions that informed the system features and UX.
 
-A CSV template (primary extraction):
+- A CSV template (primary extraction):
  I recorded local data into the prepared CSV template. The template and column definitions are available here:
  WombGuard Data Collection Template (Google Sheet): https://docs.google.com/spreadsheets/d/1p7iD4r-x2Miasu0wY60UhSl6_YymYmpQ/edit?gid=884275186
 
- Key columns in the template:
+- Key columns in the template:
  Age, Systolic_BP, Diastolic, BS, Body_Temp_F, Weight_kg, Height_m, Complications_Notes, Heart_Rate, Risk_Level
 
 
-Google Form (user needs/design survey):
+- Google Form (user needs/design survey):
  I designed a single-section survey to collect anonymous user insights that guided WombGuard’s design. The form which was used is here:
  https://docs.google.com/forms/d/e/1FAIpQLSdCFOdS9nf4GoceC5oqH8KauKKmyKRDKM087AhwJ9R6NMo4iA/viewform?usp=header
 
 
-Public dataset sources:
+- Public dataset sources:
 Mendeley Data (public maternal health datasets), it was used to train the predictive models.
 https://data.mendeley.com/datasets/p5w98dvbbk/1
 Harvard Dataverse Dataset, it was used for training the WombGuard’s conversational chatbot. https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi%3A10.7910%2FDVN%2FEZLCH3
