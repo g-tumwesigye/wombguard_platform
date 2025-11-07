@@ -1063,26 +1063,55 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
         )
         predictions_raw = predictions_response.data or []
 
-        # Fetching all users to get phone numbers
-        users_response = supabase.table("users").select("email, phone, name").execute()
+        # Fetch all users to get phone numbers
+        users_response = supabase.table("users").select("id, email, phone, name").execute()
         users_data = users_response.data or []
 
         # Creating a mapping of email to phone number
         email_to_phone = {}
         email_to_name = {}
+        id_to_phone = {}
+        id_to_name = {}
         for user in users_data:
-            email = user.get("email", "").lower()
-            email_to_phone[email] = user.get("phone", "N/A")
-            email_to_name[email] = user.get("name", "Unknown")
+            email = (user.get("email") or "").strip().lower()
+            phone = (user.get("phone") or "").strip()
+            name = user.get("name") or "Unknown"
+            normalized_phone = phone if phone else "N/A"
+
+            email_to_phone[email] = normalized_phone
+            email_to_name[email] = name
+
+            user_id = user.get("id")
+            if user_id:
+                id_to_phone[user_id] = normalized_phone
+                id_to_name[user_id] = name
+
+        def resolve_contact(user_id, email):
+            normalized_email = (email or "").strip().lower()
+            phone = email_to_phone.get(normalized_email)
+            name = email_to_name.get(normalized_email)
+
+            if user_id:
+                phone = phone if phone and phone != "N/A" else id_to_phone.get(user_id, phone)
+                name = name or id_to_name.get(user_id)
+
+            if not phone or not phone.strip():
+                phone = "N/A"
+            if not name:
+                name = "Unknown"
+
+            return name, phone
 
         # Enrich predictions with patient contact details for quick reference
         predictions = []
         for record in predictions_raw:
-            email = (record.get("user_email") or "").lower()
+            email = record.get("user_email") or ""
+            user_id = record.get("user_id")
+            patient_name, patient_phone = resolve_contact(user_id, email)
             enriched_record = {
                 **record,
-                "patient_name": email_to_name.get(email, "Unknown"),
-                "phone": email_to_phone.get(email, "N/A")
+                "patient_name": patient_name,
+                "phone": patient_phone
             }
             predictions.append(enriched_record)
 
@@ -1130,9 +1159,11 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
         high_risk_patients = []
         for p in patient_latest.values():
             if p.get("predicted_risk", "").lower().startswith("high"):
-                email = p.get("user_email", "").lower()
-                p["phone"] = email_to_phone.get(email, "N/A")
-                p["patient_name"] = email_to_name.get(email, "Unknown")
+                email = p.get("user_email", "")
+                user_id = p.get("user_id")
+                patient_name, patient_phone = resolve_contact(user_id, email)
+                p["phone"] = patient_phone
+                p["patient_name"] = patient_name
                 high_risk_patients.append(p)
 
         # Getting recently improved patients (was high-risk, now low-risk)
@@ -1159,10 +1190,14 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                             curr_prob = latest_pred.get("probability", 0)
                             improvement = ((prev_prob - curr_prob) / prev_prob * 100) if prev_prob > 0 else 0
 
+                            contact_name, contact_phone = resolve_contact(
+                                patient_latest[email].get("user_id"), email
+                            )
+
                             recently_improved.append({
                                 "user_email": email,
-                                "patient_name": email_to_name.get(email, "Unknown"),
-                                "phone": email_to_phone.get(email, "N/A"),
+                                "patient_name": contact_name,
+                                "phone": contact_phone,
                                 "previous_risk": assessment.get("predicted_risk"),
                                 "previous_probability": prev_prob,
                                 "current_risk": latest_pred.get("predicted_risk"),
@@ -1205,10 +1240,12 @@ def get_healthcare_dashboard(user_email: str = Query(...)):
                     else:
                         trend = "stable"
 
+                    contact_name, contact_phone = resolve_contact(latest.get("user_id"), email)
+
                     at_risk_alerts.append({
                         "user_email": email,
-                        "patient_name": email_to_name.get(email, "Unknown"),
-                        "phone": email_to_phone.get(email, "N/A"),
+                        "patient_name": contact_name,
+                        "phone": contact_phone,
                         "current_risk": latest.get("predicted_risk"),
                         "current_probability": latest_prob,
                         "previous_probability": prev_prob,
