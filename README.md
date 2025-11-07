@@ -341,7 +341,7 @@ wombguard_platform/
 
 ---
 
-### Models Architecture
+### WombGuard ChatBot Models Architecture
 ![WombGuardBot Models Architecture](public/screenshots/wombguardbot_models.png)
 *WombGuardBot Architecture*
 
