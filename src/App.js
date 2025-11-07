@@ -16,6 +16,7 @@ import Chatbot from './pages/Chatbot';
 import History from './pages/History';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import ProviderDirectory from './pages/ProviderDirectory';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
   <Route path="/prediction" element={<PredictionInput />} />
   <Route path="/health-check-result" element={<HealthCheckResult />} />
   <Route path="/chat" element={<Chatbot />} />
+  <Route path="/providers" element={<ProviderDirectory />} />
   <Route path="/history" element={<History />} />
   <Route path="/about" element={<About />} />
   <Route path="/contact" element={<Contact />} />

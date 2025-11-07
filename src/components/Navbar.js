@@ -54,6 +54,7 @@ const Navbar = () => {
   <NavLink to="/pregnant-dashboard">Dashboard</NavLink>
   <NavLink to="/prediction">Health Check</NavLink>
   <NavLink to="/history">History</NavLink>
+  <NavLink to="/providers">Care Team</NavLink>
   </>
   )}
   {user.role === 'admin' && (
@@ -114,6 +115,7 @@ const Navbar = () => {
   <NavLink to="/pregnant-dashboard" onClick={() => setIsOpen(false)}>Dashboard</NavLink>
   <NavLink to="/prediction" onClick={() => setIsOpen(false)}>Health Check</NavLink>
   <NavLink to="/history" onClick={() => setIsOpen(false)}>History</NavLink>
+  <NavLink to="/providers" onClick={() => setIsOpen(false)}>Care Team</NavLink>
   </>
   )}
   {user.role === 'admin' && (

@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from supabase_client import supabase
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+from statistics import mean
 import logging
 import uuid
 from chatbot_engine import get_chatbot
@@ -1028,6 +1029,129 @@ def get_risk_assessments(user_email: str = Query(...,
     except Exception as e:
         logger.error(f"Failed to fetch risk assessments: {e}")
         return {"status": "error", "data": [], "message": str(e)}
+
+
+# HEALTHCARE PROVIDER DIRECTORY ENDPOINT
+@app.get("/providers")
+def list_healthcare_providers(user_email: str = Query(...)):
+    """
+    Provide a directory of healthcare providers with contact details and consultation stats.
+    Accessible to pregnant women (primary audience), admins, and providers themselves.
+    """
+    try:
+        requester_email = user_email.strip().lower()
+
+        # Verify requesting user exists and is authorized to view providers
+        requester_response = supabase.table("users").select("role").eq("email", requester_email).limit(1).execute()
+        if not requester_response.data:
+            raise HTTPException(status_code=401, detail="User not found")
+
+        requester = requester_response.data[0]
+        if requester.get("role") not in ["pregnant_woman", "healthcare_provider", "admin"]:
+            raise HTTPException(status_code=403, detail="Unauthorized to view providers")
+
+        # Fetch all healthcare providers
+        providers_response = (
+            supabase
+            .table("users")
+            .select("id, name, email, phone, role, created_at")
+            .eq("role", "healthcare_provider")
+            .order("created_at", desc=False)
+            .execute()
+        )
+        providers_raw = providers_response.data or []
+
+        # Gather consultation data to derive provider stats
+        consultations_response = supabase.table("consultation_requests").select(
+            "healthcare_provider_email, status, created_at, responded_at, pregnant_woman_email"
+        ).execute()
+        consultations = consultations_response.data or []
+
+        stats_map = {}
+        for consult in consultations:
+            provider_email = (consult.get("healthcare_provider_email") or "").strip().lower()
+            if not provider_email:
+                continue
+
+            entry = stats_map.setdefault(provider_email, {
+                "total": 0,
+                "pending": 0,
+                "accepted": 0,
+                "declined": 0,
+                "closed": 0,
+                "unique_patients": set(),
+                "response_times": [],
+                "last_consultation_dt": None,
+                "last_consultation_raw": None
+            })
+
+            entry["total"] += 1
+            status = (consult.get("status") or "").strip().lower()
+            if status in ["pending", "accepted", "declined", "closed"]:
+                entry[status] += 1
+
+            patient_email = (consult.get("pregnant_woman_email") or "").strip().lower()
+            if patient_email:
+                entry["unique_patients"].add(patient_email)
+
+            created_at_raw = consult.get("created_at")
+            created_at_dt = parse_datetime(created_at_raw)
+            responded_at_dt = parse_datetime(consult.get("responded_at"))
+            if created_at_dt and responded_at_dt and responded_at_dt >= created_at_dt:
+                entry["response_times"].append((responded_at_dt - created_at_dt).total_seconds())
+
+            if created_at_dt:
+                prev_dt = entry.get("last_consultation_dt")
+                if not prev_dt or created_at_dt > prev_dt:
+                    entry["last_consultation_dt"] = created_at_dt
+                    entry["last_consultation_raw"] = created_at_raw
+
+        directory = []
+        for provider in providers_raw:
+            provider_email = (provider.get("email") or "").strip().lower()
+            provider_stats = stats_map.get(provider_email, {})
+
+            response_times = provider_stats.get("response_times", [])
+            avg_response_hours = None
+            if response_times:
+                avg_response_hours = round(mean(response_times) / 3600, 1)
+
+            pending = provider_stats.get("pending", 0)
+            availability = "Available"
+            if pending >= 5:
+                availability = "High demand"
+            elif pending >= 1:
+                availability = "Responding"
+
+            directory.append({
+                "id": provider.get("id"),
+                "name": provider.get("name"),
+                "email": provider.get("email"),
+                "phone": provider.get("phone") or "N/A",
+                "joined_at": provider.get("created_at"),
+                "total_consultations": provider_stats.get("total", 0),
+                "pending_consultations": pending,
+                "accepted_consultations": provider_stats.get("accepted", 0),
+                "closed_consultations": provider_stats.get("closed", 0),
+                "patients_supported": len(provider_stats.get("unique_patients", set())),
+                "average_response_hours": avg_response_hours,
+                "availability_status": availability,
+                "last_consultation_at": provider_stats.get("last_consultation_raw"),
+            })
+
+        # Sort alphabetically for consistent UI
+        directory.sort(key=lambda item: (item.get("name") or "").lower())
+
+        return {
+            "status": "success",
+            "count": len(directory),
+            "data": directory
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to build provider directory: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load providers")
 
 
 # HEALTHCARE WORKER DASHBOARD ENDPOINT

@@ -154,6 +154,20 @@ export const userService = {
   },
 };
 
+// Provider directory
+export const providerService = {
+  async list(userEmail) {
+  try {
+  const response = await apiClient.get('/providers', {
+  params: { user_email: userEmail },
+  });
+  return response.data;
+  } catch (error) {
+  throw new Error(error.response?.data?.detail || 'Failed to fetch providers');
+  }
+  },
+};
+
 // Health check
 export const healthService = {
   async checkAPI() {

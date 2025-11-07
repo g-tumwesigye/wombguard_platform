@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Heart, Activity, AlertTriangle, CheckCircle, TrendingUp, MessageSquare, Calendar, Clock, ArrowRight, User, Mail, Briefcase, Zap, RefreshCw, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
@@ -7,6 +7,7 @@ import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tool
 const PregnantDashboard = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [dashboardStats, setDashboardStats] = useState(null);
@@ -27,6 +28,22 @@ const PregnantDashboard = () => {
   const [submittingConsultation, setSubmittingConsultation] = useState(false);
   const [consultationError, setConsultationError] = useState(null);
   const [consultationSuccess, setConsultationSuccess] = useState(null);
+
+  const providerFromState = location.state?.selectedProviderEmail;
+
+  useEffect(() => {
+  if (!providerFromState) {
+  return;
+  }
+
+  setConsultationForm((prev) => ({
+  ...prev,
+  healthcare_provider_email: providerFromState
+  }));
+  setShowConsultationModal(true);
+
+  navigate(location.pathname, { replace: true });
+  }, [providerFromState, location.pathname, navigate]);
 
   useEffect(() => {
   // Only fetch data if user is available
