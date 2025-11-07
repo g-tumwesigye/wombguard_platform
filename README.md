@@ -922,7 +922,21 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 ![WombGuard Chatbot](public/screenshots/wombguardbot.png)
 *WombGuardBot's user testing*
 
-**Test 5: Frontend Pages**
+**Test 5: WombGuard Platform Responsiveness Testing on Devices**
+![Desktop Device](public/screenshots/desktop_device.png)
+*WombGuardBot's responsiveness testing on a Desktop*
+
+![Mobile Device](public/screenshots/mobile_device.png)
+*WombGuardBot's user testing on a Mobile Device,Landing page*
+![Mobile Device](public/screenshots/mobile_device.user_dashboard.png)
+*WombGuardBot's user testing on a Mobile Device logged in the User's Dashboard*
+
+![Tablet Device](public/screenshots/tablet_device_1.png)
+*WombGuardBot's user testing on a Tablet Device*
+![Tablet Device/Ipad Pro](public/screenshots/tablet_device_2.png)
+*WombGuardBot's user testing on a Tablet Device*
+
+**Test 6: Frontend Pages**
 - Landing: https://wombguard-platform.onrender.com/
 - Login: https://wombguard-platform.onrender.com/login
 - Register: https://wombguard-platform.onrender.com/register
