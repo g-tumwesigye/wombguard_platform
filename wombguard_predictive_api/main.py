@@ -26,6 +26,15 @@ load_dotenv()
 # Frontend base URL is configurable so verification links work in all environments.
 FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:3000").rstrip("/")
 
+ALLOWED_ORIGINS = {
+    "http://localhost:3000",
+    "https://wombguard-platform.onrender.com",
+    "https://wombguard-api.onrender.com",
+    FRONTEND_BASE_URL,
+}
+
+ALLOWED_ORIGINS = [origin for origin in ALLOWED_ORIGINS if origin]
+
 # Configuring logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -35,11 +44,7 @@ app = FastAPI(title="Predictive Maternal Health System & the WombGuard Conversat
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://wombguard-platform.onrender.com",
-        "https://wombguard-api.onrender.com",
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -103,7 +108,7 @@ def generate_verification_token():
 def send_verification_email(email: str, token: str):
     """Send verification email to user via Gmail SMTP."""
     try:
-    verification_link = f"{FRONTEND_BASE_URL}/verify-email?token={token}"
+        verification_link = f"{FRONTEND_BASE_URL}/verify-email?token={token}"
 
         # Getting email credentials from environment variables
         smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
@@ -584,7 +589,7 @@ def register(user: UserRegister):
         logger.info(f" Phone stored: {user_data['phone']}")
         logger.info(f" Verification email sent to: {user_data['email']}")
         # NEW: Include verification link in response for development
-        verification_link = f"http://localhost:3000/verify-email?token={verification_token}"
+        verification_link = f"{FRONTEND_BASE_URL}/verify-email?token={verification_token}"
 
         return {
             "status": "success",
