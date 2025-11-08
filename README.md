@@ -192,7 +192,7 @@ Harvard Dataverse Dataset, it was used for training the WombGuard’s conversati
 | **Database** | Supabase (PostgreSQL) • Row-Level Security (RLS) • Realtime |
 | **Authentication** | JWT (HS256) • bcrypt • Email Verification • Phone Storage |
 | **AI/ML** | scikit-learn • Sentence Transformers • Random Forest • BM25 • SHAP |
-| **Deployment** | Vercel (Frontend) • Railway (Backend) • Supabase (Database) |
+| **Deployment** | Render (Frontend) • Render (Backend) • Supabase (Database) |
 
 </div>
 
@@ -981,6 +981,84 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 - CORS configured correctly
 - Environment variables set
 ---
+### Local Testing Checklist
+
+**Frontend (React CLI)**
+1. Install dependencies: `npm install`
+2. Run automated checks: `npm test -- --watchAll=false`
+3. Launch locally for manual walkthroughs: `npm start`
+
+**Backend (FastAPI)**
+1. From `wombguard_predictive_api/`: `python3 -m venv venv && source venv/bin/activate`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run the API: `uvicorn main:app --reload --host 0.0.0.0 --port 8000`
+
+**API Smoke Tests**
+```bash
+# Health check
+curl http://localhost:8000/
+
+# Registration (replace with your email before running)
+curl -X POST http://localhost:8000/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo@example.com","password":"DemoPass123!","full_name":"Demo User","role":"pregnant_woman"}'
+
+# Login (after manually verifying the account in Supabase)
+curl -X POST http://localhost:8000/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo@example.com","password":"DemoPass123!"}'
+```
+
+> Tip: keep your terminal open after registration to confirm that verification emails are either sent via SMTP or logged to the console when credentials are missing.
+
+#### Recorded Test Evidence (2025-11-08)
+
+**Frontend test command**
+
+```
+$ npm test -- --watchAll=false
+Starting the development server...
+Compiled with warnings.
+
+[eslint]
+src/pages/PregnantDashboard.js
+  Line 3:10:   'Heart' is defined but never used
+  Line 3:17:   'Activity' is defined but never used
+  ...
+webpack compiled with 1 warning
+```
+
+**Backend health check**
+
+```
+$ curl http://localhost:8000/
+{"message":" Predictive Maternal Health System & the WombGuard Conversational ChatBot API is running successfully!"}
+```
+
+**Registration API smoke test**
+
+```
+$ curl -X POST http://localhost:8000/register \
+    -H "Content-Type: application/json" \
+    -d '{"email":"demo_testrun@example.com","password":"DemoPass123!",\
+"full_name":"Demo User","role":"pregnant_woman","phone":"+250700000000","name":"Demo User"}'
+{"status":"success","message":"Registration successful! Please check your email to verify your account.","verification_link":"http://localhost:3000/verify-email?token=Epm7VsIAiplxisGGkSKMJcXb6ydUlYVLAeEJA_vc3kY","verification_token":"Epm7VsIAiplxisGGkSKMJcXb6ydUlYVLAeEJA_vc3kY","user":{"name":"Demo User","email":"demo_testrun@example.com","phone":"+250700000000","role":"pregnant_woman","email_verified":false}}
+```
+
+**Server log excerpt during registration**
+
+```
+INFO:httpx:HTTP Request: GET https://tbpvwccscohkpelfswxo.supabase.co/rest/v1/users?select=%2A&email=eq.demo_testrun%40example.com "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://tbpvwccscohkpelfswxo.supabase.co/rest/v1/users?select=%2A&phone=eq.%2B250700000000 "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: POST https://tbpvwccscohkpelfswxo.supabase.co/rest/v1/users "HTTP/2 201 Created"
+INFO:main: Verification email sent to demo_testrun@example.com
+INFO:main: Verification link: http://localhost:3000/verify-email?token=Epm7VsIAiplxisGGkSKMJcXb6ydUlYVLAeEJA_vc3kY
+INFO:main: New pregnant woman registered: demo_testrun@example.com
+INFO:main: Phone stored: +250700000000
+INFO:main: Verification email sent to: demo_testrun@example.com
+INFO:     127.0.0.1:60731 - "POST /register HTTP/1.1" 200 OK
+```
+
 
 #### Database (Supabase)
 
@@ -1270,6 +1348,17 @@ JWT_SECRET_KEY=the-secret-key-min-32-chars
 JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
+
+**Additional environment keys for production rollout**
+
+| Location | Variable | Description |
+|----------|----------|-------------|
+| Root `.env` | `REACT_APP_API_URL` | Points the React app to the deployed API (e.g., `https://wombguard-api.onrender.com`). |
+| Backend `.env` | `FRONTEND_BASE_URL` | Used when building verification links sent to users (e.g., `https://wombguard-platform.onrender.com`). |
+| Backend `.env` | `SMTP_SERVER`, `SMTP_PORT` | Mail server host and port for outbound verification emails (defaults: `smtp.gmail.com`, `587`). |
+| Backend `.env` | `SENDER_EMAIL`, `SENDER_PASSWORD` | Email account used to send verification messages. Required for real email delivery. |
+
+> If `SENDER_EMAIL` and `SENDER_PASSWORD` are not provided, the API falls back to logging the verification link in the server console instead of sending an email.
 
 **Step 5: Setup Database**
 
@@ -1941,6 +2030,8 @@ SOFTWARE.
 - **Issues**: [GitHub Issues](https://github.com/g-tumwesigye/wombguard_platform/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/g-tumwesigye/wombguard_platform/discussions)
 - **Phone**: +250 7833........ (Rwanda)
+
+> Note: Phone number is intentionally abbreviated for privacy. Please email for the full contact details if needed.
 
 ### Support Hours
 
