@@ -948,8 +948,6 @@ hybrid_score = (alpha × sbert_score) + ((1 - alpha) × bm25_score_normalized)
 - Prediction: https://wombguard-platform.onrender.com/prediction
 
 #### Results
-
-**Date**: 2025-11-06
 **Status**: 100% Pass Rate
 **Tests**: All tests passed
 **Performance**: All < 500ms response time
