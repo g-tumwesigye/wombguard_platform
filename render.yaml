@@ -4,7 +4,7 @@ services:
     name: wombguard-api
     env: python
     region: oregon
-    plan: starter  # $7/month - 2GB RAM for AI models
+    plan: starter  
     buildCommand: |
       cd wombguard_predictive_api
       pip install --upgrade pip

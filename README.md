@@ -43,7 +43,7 @@
 
 ## Project Overview
 
-WombGuard is a maternal health web platform for predictive maternal health monitoring, risk assessment and personalized care guidance. Built with modern technologies and designed for healthcare providers and expecting mothers in Rwanda and beyond.
+WombGuard is a Predictive Maternal Health System Integrating  Early Pregnancy Risk Detection and Conversational ChatBot for Personalized Pregnancy Care. Built with modern technologies and designed for healthcare providers and expecting mothers especailly in low resource settings.
 
 ### Mission
 To reduce maternal mortality rates through early risk detection, continuous monitoring, and AI-powered personalized care.
@@ -146,7 +146,7 @@ Harvard Dataverse Dataset, it was used for training the WombGuard’s conversati
 
 **Watch the 5-minute platform demonstration:**
 
-[![WombGuard Platform Demo](https://img.shields.io/badge/▶️_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube)](YOUR_YOUTUBE_VIDEO_LINK_HERE)
+[![WombGuard Platform Demo](https://img.shields.io/badge/▶️_Watch_Demo-YouTube-red?style=for-the-badge&logo=youtube)](https://youtu.be/FP8dhMwtOec)
 
 > **Demo Highlights:**
 > - **Pregnant Woman Dashboard** - Health tracking and risk assessment
