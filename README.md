@@ -723,7 +723,7 @@ embeddings_ensemble = (embeddings_medical + embeddings_general + embeddings_qa) 
 
 **1. Semantic Search (SBERT Ensemble)**
 - **Method**: Cosine similarity between query embedding and knowledge base embeddings
-- **Models Used**: Average of 3 fine-tuned models
+- **Models Used**: 3 fine-tuned models
 - **Weight**: 70% in hybrid score
 - **Advantage**: Captures semantic meaning, handles paraphrasing
 
