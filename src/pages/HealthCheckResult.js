@@ -33,7 +33,7 @@ const HealthCheckResult = () => {
   if (isLowRisk) {
   return "Great news! Your current health assessment shows a low risk profile. Keep maintaining your healthy habits and continue regular check-ups.";
   } else {
-  return "Your assessment indicates a higher risk level. This doesn't mean there's an immediate concern, but it's important to follow up with your healthcare provider and monitor your health closely.";
+  return "Your assessment indicates a higher risk level. Please contact your healthcare provider within 24 hours for an urgent review and monitor symptoms closely.";
   }
   };
 
